@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="INGTECH">
+<meta name="theme-color" content="#1c1c1e">
+
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%231c1c1e' rx='40'/%3E%3Cpolygon points='40,30 120,30 95,85 15,85' fill='%23f5f5f7'/%3E%3Cpolygon points='60,95 140,95 115,150 35,150' fill='%23e8a200'/%3E%3C/svg%3E">
+<title>INGTECH — Kalkulace 2026</title>
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+:root{
+  --bg:#f5f5f7;
+  --bg2:#e8e8ed;
+  --card:#ffffff;
+  --card2:#f5f5f7;
+  --card3:#ebebf0;
+  --border:rgba(0,0,0,0.07);
+  --border2:rgba(0,0,0,0.12);
+  --text:#1d1d1f;
+  --text2:#6e6e73;
+  --text3:#aeaeb2;
+  --accent:#e8a200;
+  --accent-light:#fff8e6;
+  --blue:#0071e3;
+  --blue-light:#e8f0fb;
+  --green:#34c759;
+  --green-light:#e8f8ed;
+  --red:#ff3b30;
+  --red-light:#fff0ef;
+  --r:20px;
+  --r-sm:14px;
+  --r-xs:10px;
+  --sh:0 2px 20px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  --sh-lg:0 8px 40px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06);
+  --sidebar-w:200px;
+  --topbar-h:58px;
+  --tab-h:80px;
+}
+body.dark{
+  --bg:#000000;
+  --bg2:#1c1c1e;
+  --card:#1c1c1e;
+  --card2:#2c2c2e;
+  --card3:#3a3a3c;
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.14);
+  --text:#f5f5f7;
+  --text2:#98989d;
+  --text3:#636366;
+  --blue-light:#0d2240;
+  --green-light:#0d2e19;
+  --accent-light:#2a1f00;
+  --red-light:#2d0d0c;
+  --sh:0 2px 20px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3);
+  --sh-lg:0 8px 40px rgba(0,0,0,0.5);
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Helvetica Neue',Arial,sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;-webkit-font-smoothing:antialiased;
+  transition:background .3s,color .3s;
+  overscroll-behavior:none;
+}
+
+
+.topbar{
+  height:var(--topbar-h);
+  background:rgba(255,255,255,0.82);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--border);
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;
+  transition:background .3s;
+}
+body.dark .topbar{background:rgba(28,28,30,0.88)}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.ingtech-logo{display:flex;align-items:center;gap:10px;height:40px}
+.logo-svg-mark{flex-shrink:0}
+.logo-black{fill:#1d1d1f;transition:fill .3s}
+body.dark .logo-black{fill:#f5f5f7}
+.logo-wordmark{font-size:20px;font-weight:900;letter-spacing:-0.5px;color:#1d1d1f;line-height:1;font-family:'Inter','Helvetica Neue',Arial,sans-serif}
+body.dark .logo-wordmark{color:#f5f5f7}
+.logo-year{font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-light);padding:2px 7px;border-radius:6px;margin-left:6px;letter-spacing:.3px;border:1px solid rgba(232,162,0,.2)}
+.topbar-right{display:flex;align-items:center;gap:8px}
+.tb-btn{
+  width:36px;height:36px;border-radius:10px;
+  border:1.5px solid var(--border2);
+  background:var(--card);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  padding:0;transition:all .15s;color:var(--text2);
+}
+.tb-btn svg{width:17px;height:17px;stroke:var(--text2);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .15s}
+.tb-btn:hover{background:var(--card2);transform:scale(1.05)}
+.tb-btn:hover svg{stroke:var(--text)}
+.tb-btn:active{transform:scale(.95)}
+
+
+.layout{
+  display:flex;
+  padding-top:var(--topbar-h);
+  min-height:100vh;
+}
+
+
+.sidebar{
+  width:var(--sidebar-w);min-width:var(--sidebar-w);
+  background:var(--card);
+  border-right:1px solid var(--border);
+  position:fixed;top:var(--topbar-h);left:0;
+  height:calc(100vh - var(--topbar-h));
+  overflow-y:auto;padding:14px 8px;
+  transition:background .3s;
+  display:flex;flex-direction:column;gap:1px;
+}
+.sidebar-section-label{
+  font-size:9px;font-weight:700;letter-spacing:.9px;
+  color:var(--text3);text-transform:uppercase;
+  padding:0 10px;margin:12px 0 3px;
+}
+.sidebar-section-label:first-child{margin-top:0}
+.nav-item{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border-radius:var(--r-xs);
+  border:none;background:transparent;cursor:pointer;
+  font-size:13px;font-weight:500;color:var(--text2);
+  text-align:left;transition:all .15s;font-family:inherit;
+  width:100%;position:relative;
+}
+.nav-item:hover{background:var(--card2);color:var(--text)}
+.nav-item.active{background:var(--blue);color:#fff}
+.nav-item.active .nav-ico{opacity:1}
+.nav-ico{font-size:14px;opacity:.65;transition:opacity .15s;flex-shrink:0}
+.nav-item.active .nav-ico{opacity:1}
+.nav-ico svg{width:14px;height:14px}
+.nav-pill{
+  margin-left:auto;background:rgba(255,255,255,.3);
+  color:#fff;font-size:10px;font-weight:700;
+  padding:1px 6px;border-radius:8px;
+}
+.nav-item:not(.active) .nav-pill{background:var(--accent);color:#fff}
+
+
+.main{
+  flex:1;margin-left:var(--sidebar-w);
+  padding:24px 28px 40px;
+  min-height:calc(100vh - var(--topbar-h));
+  min-width:0;
+}
+
+
+.calc-layout{
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:20px;
+  align-items:start;
+}
+.calc-result-col{
+  position:sticky;
+  top:calc(var(--topbar-h) + 24px);
+}
+.calc-result-col .result-box{
+  margin-top:0;
+  display:block !important;
+  min-height:180px;
+}
+.calc-result-col .result-box:not(.show){
+  background:var(--card2);
+  border:1.5px dashed var(--border2);
+}
+.calc-result-col .result-box:not(.show) .result-top,
+.calc-result-col .result-box:not(.show) .result-formula,
+.calc-result-col .result-box:not(.show) .result-rows{display:none}
+.calc-result-col .result-box:not(.show) .result-empty{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:48px 20px;
+  color:var(--text3);font-size:13px;text-align:center;gap:12px;
+}
+.calc-result-col .result-box:not(.show) .result-empty svg{
+  width:36px;height:36px;stroke:var(--text3);fill:none;
+  stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;opacity:.4;
+}
+.calc-result-col .result-box.show .result-empty{display:none !important}
+
+
+.section{display:none}
+.section.active{display:block;animation:sectionIn .25s cubic-bezier(.4,0,.2,1)}
+@keyframes sectionIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+
+.page-header{margin-bottom:28px}
+.page-title{font-size:28px;font-weight:800;letter-spacing:-1px;color:var(--text);line-height:1.1}
+.page-sub{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:8px;font-size:12px;color:var(--text2);
+  background:var(--card);border:1px solid var(--border);
+  padding:5px 12px;border-radius:20px;
+  font-family:'Menlo','SF Mono',monospace;
+}
+
+
+.dash-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:28px}
+.dash-card{
+  background:var(--card);border-radius:var(--r);
+  border:1px solid var(--border);padding:20px;
+  cursor:pointer;transition:all .2s cubic-bezier(.4,0,.2,1);
+  box-shadow:var(--sh);position:relative;overflow:hidden;
+}
+.dash-card::before{
+  content:'';position:absolute;top:0;right:0;
+  width:80px;height:80px;border-radius:50%;
+  transform:translate(20px,-20px);
+  opacity:.08;
+}
+.dash-card.blue::before{background:var(--blue)}
+.dash-card.green::before{background:var(--green)}
+.dash-card.orange::before{background:var(--accent)}
+.dash-card.purple::before{background:#af52de}
+.dash-card:hover{transform:translateY(-3px);box-shadow:var(--sh-lg)}
+.dash-card:active{transform:translateY(0) scale(.98)}
+.dash-icon{font-size:28px;margin-bottom:12px}
+.dash-label{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.dash-desc{font-size:11px;color:var(--text2);line-height:1.4}
+.dash-arrow{
+  position:absolute;bottom:16px;right:16px;
+  font-size:16px;color:var(--text3);
+}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.stat-card{
+  background:var(--card);border-radius:var(--r-sm);
+  border:1px solid var(--border);padding:16px;
+  text-align:center;box-shadow:var(--sh);
+}
+.stat-val{font-size:22px;font-weight:800;letter-spacing:-1px;color:var(--text);margin-bottom:2px}
+.stat-lbl{font-size:11px;color:var(--text2);font-weight:500}
+
+
+.card{
+  background:var(--card);border-radius:var(--r);
+  border:1px solid var(--border);
+  padding:24px;margin-bottom:16px;
+  box-shadow:var(--sh);
+  transition:background .3s;
+}
+.card-header{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:20px;
+}
+.card-header-icon{
+  width:34px;height:34px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;
+}
+.card-header-icon.blue{background:var(--blue-light)}
+.card-header-icon.orange{background:var(--accent-light)}
+.card-header-icon.green{background:var(--green-light)}
+.card-header-text{}
+.card-title{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-.2px}
+.card-subtitle{font-size:11px;color:var(--text2);margin-top:1px;font-family:'Menlo','SF Mono',monospace}
+
+
+.schema-wrap{
+  background:var(--card2);border-radius:var(--r-sm);
+  border:1px solid var(--border);
+  display:flex;justify-content:center;align-items:center;
+  padding:16px;margin-bottom:20px;
+}
+
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-col{display:flex;flex-direction:column;gap:5px}
+.form-col.full{grid-column:1/-1}
+.field-label{
+  font-size:11px;font-weight:700;color:var(--text2);
+  letter-spacing:.2px;text-transform:uppercase;
+}
+.field-input,.field-select{
+  padding:13px 15px;
+  border:1.5px solid var(--border2);
+  border-radius:var(--r-sm);
+  font-size:15px;font-family:inherit;
+  color:var(--text);background:var(--card2);
+  transition:all .15s;outline:none;width:100%;
+  -webkit-appearance:none;appearance:none;
+}
+.field-input:focus,.field-select:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 4px rgba(0,113,227,.12);
+  background:var(--card);
+}
+body.dark .field-input,body.dark .field-select{border-color:var(--border2)}
+.field-select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%236e6e73' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;
+  padding-right:38px;cursor:pointer;
+}
+.field-hint{font-size:11px;color:var(--text3);margin-top:2px}
+
+
+.zip-toggle{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;
+  background:var(--card2);border-radius:var(--r-sm);
+  border:1.5px solid var(--border2);cursor:pointer;
+  transition:all .15s;user-select:none;
+}
+.zip-toggle:hover{border-color:var(--blue)}
+.zip-toggle.on{background:var(--blue-light);border-color:rgba(0,113,227,.3)}
+.zip-toggle-left{display:flex;flex-direction:column;gap:2px}
+.zip-toggle-title{font-size:14px;font-weight:600;color:var(--text)}
+.zip-toggle-sub{font-size:11px;color:var(--text2)}
+.zip-switch{
+  width:46px;height:28px;border-radius:14px;
+  background:var(--card3);border:none;cursor:pointer;
+  position:relative;transition:background .2s;flex-shrink:0;
+}
+.zip-switch::after{
+  content:'';position:absolute;
+  width:22px;height:22px;border-radius:11px;
+  background:#fff;top:3px;left:3px;
+  transition:transform .2s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 1px 4px rgba(0,0,0,.3);
+}
+.zip-toggle.on .zip-switch{background:var(--blue)}
+.zip-toggle.on .zip-switch::after{transform:translateX(18px)}
+
+
+.marze-wrap{
+  background:var(--card2);border-radius:var(--r-sm);
+  border:1.5px solid var(--border2);padding:14px 16px;
+}
+.marze-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.marze-top .form-col{flex:1}
+.marze-display{
+  background:var(--accent-light);border-radius:var(--r-xs);
+  padding:10px 14px;min-width:140px;text-align:center;
+  border:1.5px solid rgba(232,162,0,.25);
+}
+.marze-display-label{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
+.marze-display-val{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-top:2px}
+
+.marze-bar-wrap{display:flex;align-items:center;gap:8px}
+.marze-bar-bg{
+  flex:1;height:6px;border-radius:3px;
+  background:var(--card3);overflow:hidden;
+}
+.marze-bar-fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--accent),var(--red));
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+  width:0%;
+}
+.marze-bar-label{font-size:11px;color:var(--text2);white-space:nowrap;min-width:36px;text-align:right}
+
+
+.btn-row{display:flex;gap:10px;margin-top:18px}
+.btn-primary{
+  flex:1;padding:15px;
+  background:var(--blue);color:#fff;
+  border:none;border-radius:var(--r-sm);
+  font-size:15px;font-weight:700;cursor:pointer;
+  font-family:inherit;letter-spacing:-.3px;
+  transition:all .15s;position:relative;overflow:hidden;
+}
+.btn-primary:hover{background:#0077ed;transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,113,227,.35)}
+.btn-primary:active{transform:translateY(1px)}
+.btn-secondary{
+  padding:15px 20px;
+  background:var(--accent);color:#fff;
+  border:none;border-radius:var(--r-sm);
+  font-size:14px;font-weight:700;cursor:pointer;
+  font-family:inherit;white-space:nowrap;
+  transition:all .15s;
+}
+.btn-secondary:hover{opacity:.88;transform:translateY(-1px)}
+.btn-secondary:active{transform:translateY(1px)}
+.btn-ghost{
+  padding:15px 18px;
+  background:var(--card2);color:var(--text2);
+  border:1.5px solid var(--border2);border-radius:var(--r-sm);
+  font-size:14px;font-weight:600;cursor:pointer;
+  font-family:inherit;transition:all .15s;
+}
+.btn-ghost:hover{border-color:var(--red);color:var(--red);background:var(--red-light)}
+
+
+.result-box{
+  margin-top:16px;
+  background:linear-gradient(145deg,#1d1d1f 0%,#2d2d2f 100%);
+  border-radius:var(--r);padding:22px 24px;
+  display:none;
+  border:1px solid rgba(255,255,255,.06);
+}
+.result-box.show{display:block;animation:resultIn .3s cubic-bezier(.4,0,.2,1)}
+@keyframes resultIn{
+  from{opacity:0;transform:scale(.97) translateY(8px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+.result-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+.result-left{}
+.result-eyebrow{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:4px}
+.result-amount{font-size:36px;font-weight:800;color:#fff;letter-spacing:-1.5px;line-height:1}
+.result-unit{font-size:16px;font-weight:400;color:rgba(255,255,255,.4);margin-left:4px}
+.result-sell-chip{
+  background:rgba(52,199,89,.2);border:1px solid rgba(52,199,89,.3);
+  border-radius:8px;padding:6px 12px;text-align:right;
+}
+.result-sell-label{font-size:10px;color:rgba(52,199,89,.7);font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.result-sell-val{font-size:18px;font-weight:800;color:#30d158;letter-spacing:-.5px}
+.result-formula{
+  font-size:11px;color:rgba(255,255,255,.3);
+  font-family:'Menlo','SF Mono',monospace;
+  margin-bottom:16px;line-height:1.6;
+}
+.result-rows{display:grid;gap:6px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px}
+.rrow{display:flex;justify-content:space-between;align-items:center}
+.rrow-lbl{font-size:12px;color:rgba(255,255,255,.4)}
+.rrow-val{font-size:12px;font-weight:600;color:rgba(255,255,255,.8)}
+.rrow-val.hi{color:var(--accent);font-size:15px;font-weight:800}
+
+
+.cart-empty-state{
+  text-align:center;padding:60px 20px;
+}
+.cart-empty-icon{font-size:48px;margin-bottom:16px;opacity:.5}
+.cart-empty-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px}
+.cart-empty-sub{font-size:14px;color:var(--text2)}
+.cart-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;background:var(--card2);
+  border-radius:var(--r-sm);margin-bottom:10px;
+  border:1px solid var(--border);
+  animation:sectionIn .2s ease;
+}
+.cart-item-icon{
+  width:40px;height:40px;border-radius:12px;
+  background:var(--blue-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.cart-item-body{flex:1;min-width:0}
+.cart-item-title{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.cart-prices{text-align:right;flex-shrink:0}
+.cart-item-price{font-size:15px;font-weight:800;color:var(--text);letter-spacing:-.4px}
+.cart-item-sell{font-size:11px;font-weight:700;color:var(--green)}
+.cart-del{
+  width:32px;height:32px;border-radius:8px;
+  border:none;background:transparent;
+  color:var(--text3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;transition:all .15s;flex-shrink:0;
+  padding:0;
+}
+.cart-del svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cart-del:hover{background:var(--red-light);color:var(--red)}
+
+.cart-summary{
+  background:linear-gradient(145deg,#1d1d1f,#2d2d2f);
+  border-radius:var(--r);padding:20px 22px;margin-top:6px;
+}
+.cart-sum-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.cart-sum-row:last-child{margin-bottom:0}
+.cart-sum-lbl{font-size:13px;color:rgba(255,255,255,.5);font-weight:500}
+.cart-sum-val{font-size:24px;font-weight:800;color:#fff;letter-spacing:-1px}
+.cart-sum-sell{font-size:20px;font-weight:800;color:#30d158;letter-spacing:-.8px}
+.cart-sum-meta{font-size:11px;color:rgba(255,255,255,.25);margin-top:8px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08)}
+
+
+.hist-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;background:var(--card2);
+  border-radius:var(--r-sm);margin-bottom:8px;
+  border:1px solid var(--border);cursor:pointer;
+  transition:all .15s;
+}
+.hist-item:hover{border-color:var(--blue);background:var(--blue-light)}
+.hist-ico{font-size:20px;flex-shrink:0}
+.hist-body{flex:1;min-width:0}
+.hist-title{font-size:13px;font-weight:700;color:var(--text)}
+.hist-desc{font-size:11px;color:var(--text2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-right{text-align:right;flex-shrink:0}
+.hist-price{font-size:14px;font-weight:800;color:var(--blue);letter-spacing:-.3px}
+.hist-sell{font-size:11px;font-weight:700;color:var(--green)}
+.hist-time{font-size:10px;color:var(--text3);margin-top:2px}
+
+
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.chip{
+  padding:6px 14px;border-radius:20px;
+  border:1.5px solid var(--border2);
+  background:var(--card2);font-size:12px;font-weight:600;
+  color:var(--text2);cursor:pointer;transition:all .15s;font-family:inherit;
+}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip.on{background:var(--text);border-color:var(--text);color:#fff}
+body.dark .chip.on{background:#f5f5f7;border-color:#f5f5f7;color:#1d1d1f}
+.search-field{
+  margin-left:auto;padding:7px 14px;
+  border:1.5px solid var(--border2);
+  border-radius:20px;font-size:12px;font-family:inherit;
+  outline:none;background:var(--card2);color:var(--text);width:180px;
+  transition:all .15s;
+}
+.search-field:focus{border-color:var(--blue);background:var(--card);box-shadow:0 0 0 3px rgba(0,113,227,.1)}
+
+.tbl-wrap{overflow-x:auto;border-radius:var(--r-sm);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{background:#1d1d1f;color:#fff}
+body.dark thead{background:#f5f5f7;color:#1d1d1f}
+thead th{padding:11px 12px;text-align:left;font-weight:700;font-size:10px;letter-spacing:.5px;white-space:nowrap;text-transform:uppercase}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--card2)}
+tbody td{padding:10px 12px;color:var(--text);white-space:nowrap}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:.3px}
+.tag-mirka{background:#fff3e0;color:#bf5000}
+.tag-deer{background:#e8f5e9;color:#1a5e20}
+.tag-ape{background:#fce4ec;color:#78002e}
+.price-cell{font-weight:700;color:var(--blue)}
+.empty-cell{color:var(--text3);font-size:10px}
+
+
+.spoje-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.spoje-card{background:var(--card2);border-radius:var(--r-sm);border:1px solid var(--border);overflow:hidden}
+.spoje-head{background:#1d1d1f;color:#fff;padding:12px 16px;font-size:13px;font-weight:700}
+body.dark .spoje-head{background:#f5f5f7;color:#1d1d1f}
+.spoje-head em{color:var(--accent);font-style:normal}
+.spoje-row{display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);font-size:13px}
+.spoje-row:last-child{border-bottom:none}
+.spoje-range{color:var(--text2)}
+.spoje-price{font-weight:800;color:var(--blue)}
+
+
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:18px;box-shadow:var(--sh)}
+.info-card-icon{font-size:24px;margin-bottom:10px}
+.info-card-title{font-size:13px;font-weight:700;margin-bottom:5px}
+.info-card-text{font-size:12px;color:var(--text2);line-height:1.6}
+.code-block{
+  background:#1d1d1f;border-radius:var(--r-sm);
+  padding:18px 22px;font-family:'Menlo','SF Mono',monospace;
+  font-size:12.5px;line-height:2.2;color:#fff;
+}
+body.dark .code-block{background:#000;border:1px solid var(--border)}
+.co{color:rgba(255,255,255,.3)}.cv{color:#ff9f0a}.cs{color:#30d158;font-weight:700}
+
+
+.notice{
+  display:flex;align-items:flex-start;gap:10px;
+  background:var(--blue-light);border-radius:var(--r-sm);
+  padding:12px 16px;margin-top:14px;font-size:13px;
+  color:#004fad;border:1px solid rgba(0,113,227,.15);
+}
+body.dark .notice{color:#6ab0ff}
+
+
+.toast{
+  position:fixed;bottom:calc(var(--tab-h) + 12px);
+  left:50%;transform:translateX(-50%) translateY(10px);
+  background:#1d1d1f;color:#fff;
+  padding:11px 22px;border-radius:22px;
+  font-size:14px;font-weight:600;
+  opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);
+  z-index:9999;pointer-events:none;white-space:nowrap;
+  box-shadow:var(--sh-lg);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(min-width:769px){.toast{bottom:24px}}
+
+
+.tab-bar{display:none}
+
+@media(max-width:768px){
+  :root{--topbar-h:56px;--tab-h:76px}
+
+  .topbar{padding:0 20px;height:var(--topbar-h)}
+  .logo-year{display:none}
+  .logo-wordmark{font-size:18px}
+
+  .sidebar{display:none}
+
+  .main{
+    margin-left:0;
+    padding:20px 16px calc(var(--tab-h) + 16px);
+    max-width:100%;
+  }
+
+  .calc-layout{grid-template-columns:1fr !important}
+  .calc-result-col{position:static}
+  .calc-result-col .result-box{min-height:unset}
+
+  .page-title{font-size:22px}
+
+  .dash-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .dash-card{padding:16px}
+  .dash-icon{font-size:24px;margin-bottom:8px}
+  .dash-label{font-size:12px}
+  .dash-desc{display:none}
+  .dash-arrow{display:none}
+
+  .stats-row{grid-template-columns:repeat(3,1fr);gap:8px}
+  .stat-card{padding:12px 8px}
+  .stat-val{font-size:18px}
+  .stat-lbl{font-size:10px}
+
+  .form-grid{grid-template-columns:1fr}
+  .form-col.half{grid-column:unset}
+  .info-grid{grid-template-columns:1fr}
+  .spoje-grid{grid-template-columns:1fr}
+
+  .btn-row{flex-direction:column}
+  .btn-secondary{width:100%;text-align:center}
+
+  .marze-display{min-width:0;flex:1}
+  .marze-top{flex-wrap:wrap}
+
+  
+  .tab-bar{
+    display:flex;
+    position:fixed;bottom:0;left:0;right:0;
+    height:var(--tab-h);
+    background:rgba(255,255,255,.88);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    border-top:1px solid var(--border);
+    z-index:400;padding:0 4px;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  body.dark .tab-bar{background:rgba(28,28,30,.92)}
+  .tab-item{
+    flex:1;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:3px;padding:8px 4px;
+    border:none;background:transparent;cursor:pointer;
+    font-size:10px;font-weight:600;
+    color:var(--text3);transition:color .15s;
+    font-family:inherit;position:relative;
+  }
+  .tab-item.active{color:var(--blue)}
+  .tab-ico{font-size:22px;line-height:1}
+  .tab-badge{
+    position:absolute;top:6px;right:50%;
+    transform:translateX(10px);
+    background:var(--red);color:#fff;
+    font-size:9px;font-weight:800;
+    width:16px;height:16px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  .result-amount{font-size:28px}
+  .result-top{flex-direction:column;gap:12px}
+  .result-sell-chip{align-self:stretch;text-align:left}
+
+  .card{padding:18px}
+  .tbl-wrap{font-size:11px}
+}
+
+@media(max-width:380px){
+  .dash-grid{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .stats-row .stat-card:last-child{grid-column:1/-1}
+}
+
+
+.mat-info-card{
+  margin-top:10px;
+  background:var(--card2);
+  border:1.5px solid var(--border2);
+  border-radius:var(--r-sm);
+  padding:14px 16px;
+  animation:sectionIn .2s ease;
+  display:none;
+}
+.mat-info-card.visible{display:block}
+.mat-info-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.mat-info-name{font-size:14px;font-weight:800;color:var(--text);letter-spacing:-.3px}
+.mat-info-brand{
+  font-size:10px;font-weight:700;letter-spacing:.4px;
+  padding:2px 8px;border-radius:6px;
+}
+.mat-info-text{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:12px}
+.mat-info-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mat-info-zrn{
+  font-size:11px;font-weight:600;color:var(--text2);
+  background:var(--card);border:1px solid var(--border2);
+  padding:3px 10px;border-radius:6px;
+  font-family:'Menlo','SF Mono',monospace;
+}
+.mat-tag{
+  font-size:10px;font-weight:700;
+  padding:3px 9px;border-radius:20px;
+  background:var(--blue-light);color:var(--blue);
+  border:1px solid rgba(0,113,227,.15);
+}
+
+
+@media print{
+  
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  @page{margin:15mm 18mm;size:A4}
+
+  
+  .topbar,.sidebar,.tab-bar,.btn-row,.cart-actions,
+  .filter-bar,.tb-btn,.cart-del,.nav-item,.page-sub,
+  .dash-grid,.stats-row,.schema-wrap,.mat-info-card,
+  .zip-toggle,.marze-wrap,.result-box,.calc-result-col,
+  .page-header,.card-header,.section:not(#s-kosik),
+  #s-kosik .card-header{display:none!important}
+
+  
+  body{background:#fff!important;color:#1d1d1f!important;font-family:'Inter',Arial,sans-serif;font-size:11pt}
+  .layout{display:block!important}
+  .main{margin:0!important;padding:0!important;max-width:100%!important}
+  .section{display:none!important}
+  #s-kosik{display:block!important}
+  .card{box-shadow:none!important;border:none!important;padding:0!important;background:transparent!important}
+
+  
+  #print-header-inner{display:block!important}
+  #s-kosik::before{display:none!important}
+
+  
+  .cart-item{
+    display:flex!important;
+    align-items:center!important;
+    padding:8pt 10pt!important;
+    margin-bottom:4pt!important;
+    background:#f9f9f9!important;
+    border:1pt solid #e0e0e0!important;
+    border-radius:4pt!important;
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+  }
+  .cart-item-icon{
+    width:28pt!important;height:28pt!important;
+    background:#eaf2ff!important;
+    border-radius:6pt!important;
+    flex-shrink:0!important;
+  }
+  .cart-item-icon svg{stroke:#0071e3!important}
+  .cart-item-title{font-size:10pt!important;font-weight:700!important;color:#1d1d1f!important}
+  .cart-item-sub{font-size:8pt!important;color:#636366!important}
+  .cart-item-price{font-size:12pt!important;font-weight:800!important;color:#1d1d1f!important}
+  .cart-item-sell{font-size:9pt!important;color:#1a7a34!important;font-weight:700!important}
+
+  
+  .cart-summary{
+    background:#1d1d1f!important;
+    border-radius:6pt!important;
+    padding:12pt 16pt!important;
+    margin-top:10pt!important;
+    break-inside:avoid!important;
+  }
+  .cart-sum-lbl{color:rgba(255,255,255,.6)!important;font-size:9pt!important}
+  .cart-sum-val{color:#fff!important;font-size:18pt!important;font-weight:800!important}
+  .cart-sum-sell{color:#30d158!important;font-size:14pt!important;font-weight:800!important}
+  .cart-sum-meta{color:rgba(255,255,255,.35)!important;font-size:8pt!important}
+
+  
+  .cart-empty-state{display:none!important}
+}
+</style>
+
+</head>
+<body class="dark">
+<div class="toast" id="toast"></div>
+
+
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="ingtech-logo">
+      <span class="logo-wordmark">INGTECH</span>
+      <span class="logo-year">2026</span>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="tb-btn" id="dark-btn" onclick="toggleDark()" title="Tmavý / světlý režim" style="color:var(--text2)"></button>
+    <button class="tb-btn" id="print-btn" onclick="printDoc()" title="Tisk / Export PDF" style="color:var(--text2)"></button>
+  </div>
+</header>
+
+<div class="layout">
+  
+  <nav class="sidebar">
+    <div class="sidebar-section-label">Přehled</div>
+    <button class="nav-item active" data-nav="dash" onclick="nav('dash',this)"><span class="nav-ico" data-ico="home"></span>Dashboard</button>
+    <div class="sidebar-section-label">Kalkulace</div>
+    <button class="nav-item" data-nav="pas" onclick="nav('pas',this)"><span class="nav-ico" data-ico="belt"></span>Nekonečné pásy</button>
+    <button class="nav-item" data-nav="role" onclick="nav('role',this)"><span class="nav-ico" data-ico="roll"></span>Role</button>
+    <button class="nav-item" data-nav="vysek" onclick="nav('vysek',this)"><span class="nav-ico" data-ico="disc"></span>Kruhový výsek</button>
+    <button class="nav-item" data-nav="list" onclick="nav('list',this)"><span class="nav-ico" data-ico="sheet"></span>Listy</button>
+    <div class="sidebar-section-label">Přehledy</div>
+    <button class="nav-item" data-nav="kosik" onclick="nav('kosik',this)" id="snav-kosik"><span class="nav-ico" data-ico="cart"></span>Souhrn zakázky <span class="nav-pill" id="s-cart-badge" style="display:none">0</span></button>
+    <button class="nav-item" data-nav="historie" onclick="nav('historie',this)"><span class="nav-ico" data-ico="clock"></span>Historie</button>
+    <div class="sidebar-section-label">Ceníky</div>
+    <button class="nav-item" data-nav="materialy" onclick="nav('materialy',this)"><span class="nav-ico" data-ico="table"></span>Materiály</button>
+    <button class="nav-item" data-nav="spoje" onclick="nav('spoje',this)"><span class="nav-ico" data-ico="link"></span>Ceník spojů</button>
+    <div class="sidebar-section-label">Info</div>
+    <button class="nav-item" data-nav="info" onclick="nav('info',this)"><span class="nav-ico" data-ico="info"></span>Průvodce</button>
+  </nav>
+
+  <main class="main">
+
+    
+    <div class="section active" id="s-dash">
+      <div class="page-header">
+        <div class="page-title">Kalkulace 2026</div>
+      </div>
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card"><div class="stat-val" id="stat-calc">0</div><div class="stat-lbl">Výpočtů</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-cart">0</div><div class="stat-lbl">V souhrnu</div></div>
+        <div class="stat-card"><div class="stat-val" id="stat-total">—</div><div class="stat-lbl">Celkem Kč</div></div>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-card purple" onclick="navBtn('pas')">
+          <div class="dash-icon" data-ico="belt"></div>
+          <div class="dash-label">Nekonečné pásy</div>
+          <div class="dash-desc">Materiál + cena spoje z ceníku</div>
+          <div class="dash-arrow" data-ico="chevron"></div>
+        </div>
+        <div class="dash-card blue" onclick="navBtn('role')">
+          <div class="dash-icon" data-ico="roll"></div>
+          <div class="dash-label">Kalkulace role</div>
+          <div class="dash-desc">Šířka × délka × cena materiálu</div>
+          <div class="dash-arrow" data-ico="chevron"></div>
+        </div>
+        <div class="dash-card orange" onclick="navBtn('vysek')">
+          <div class="dash-icon" data-ico="disc"></div>
+          <div class="dash-label">Kruhový výsek</div>
+          <div class="dash-desc">Průměr² × cena × koef. 1,5</div>
+          <div class="dash-arrow" data-ico="chevron"></div>
+        </div>
+        <div class="dash-card green" onclick="navBtn('list')">
+          <div class="dash-icon" data-ico="sheet"></div>
+          <div class="dash-label">Kalkulace listu</div>
+          <div class="dash-desc">Šířka × délka × cena materiálu</div>
+          <div class="dash-arrow" data-ico="chevron"></div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="section" id="s-role">
+      <div class="page-header">
+        <div class="page-title">🔄 Role</div>
+        <div class="page-sub">šířka (m) × délka (m) × cena materiálu (Kč/m²)</div>
+      </div>
+      <div class="calc-layout">
+        
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-icon blue" data-ico="ruler"></div>
+            <div class="card-header-text"><div class="card-title">Parametry role</div></div>
+          </div>
+          <div class="schema-wrap">
+            <svg viewBox="0 0 340 100" width="100%" style="max-width:320px;font-family:Inter,sans-serif">
+              <rect x="16" y="22" width="210" height="56" rx="7" fill="var(--blue-light)" stroke="var(--blue)" stroke-width="2"/>
+              <rect x="226" y="22" width="16" height="56" rx="4" fill="var(--blue)" opacity=".3"/>
+              <line x1="16" y1="12" x2="242" y2="12" stroke="var(--accent)" stroke-width="1.5" marker-start="url(#ms1)" marker-end="url(#me1)"/>
+              <text x="129" y="8" text-anchor="middle" font-size="10" fill="var(--accent)" font-weight="700">délka role (m)</text>
+              <line x1="268" y1="22" x2="268" y2="78" stroke="var(--blue)" stroke-width="1.5" marker-start="url(#ms1)" marker-end="url(#me1)"/>
+              <text x="310" y="54" text-anchor="middle" font-size="10" fill="var(--blue)" font-weight="700">šířka (m)</text>
+              <text x="119" y="57" text-anchor="middle" font-size="14" fill="var(--blue)" font-weight="800">ROLE</text>
+              <defs>
+                <marker id="ms1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6,0L0,3L6,6" fill="none" stroke="var(--accent)" stroke-width="1"/></marker>
+                <marker id="me1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0L6,3L0,6" fill="none" stroke="var(--accent)" stroke-width="1"/></marker>
+              </defs>
+            </svg>
+          </div>
+          <div class="form-grid">
+            <div class="form-col"><label class="field-label">Výrobce</label><select class="field-select" id="role-vyrobce" onchange="fillTypy('role')"><option value="">— Vyberte výrobce —</option><option>MIRKA</option><option>DEERFOS</option><option>APE</option></select></div>
+            <div class="form-col"><label class="field-label">Typ materiálu</label><select class="field-select" id="role-typ" onchange="fillZrna('role')"><option value="">— Nejprve výrobce —</option></select></div>
+            <div class="form-col full"><label class="field-label">Zrnitost</label><select class="field-select" id="role-zrno"><option value="">— Nejprve typ —</option></select></div>
+            <div class="form-col full"><div class="mat-info-card" id="role-matinfo"></div></div>
+            <div class="form-col"><label class="field-label">Šířka role (mm)</label><input type="number" class="field-input" id="role-sirka" placeholder="např. 150" min="1" onkeydown="ec(event,'calcRole')"></div>
+            <div class="form-col"><label class="field-label">Délka role (m)</label><input type="number" class="field-input" id="role-delka" placeholder="např. 50" min="0.1" step="0.1" onkeydown="ec(event,'calcRole')"></div>
+            <div class="form-col"><label class="field-label">Počet rolí</label><input type="number" class="field-input" id="role-pocet" value="1" min="1" onkeydown="ec(event,'calcRole')"></div>
+            <div class="form-col full">
+              <div class="marze-wrap">
+                <div class="marze-top">
+                  <div class="form-col"><label class="field-label">Rabat (%)</label><input type="number" class="field-input" id="role-marze" placeholder="0" min="0" max="999" step="1" oninput="updM('role')" onkeydown="ec(event,'calcRole')"></div>
+                  <div class="marze-display"><div class="marze-display-label">Cena pro zákazníka</div><div class="marze-display-val" id="role-mv">—</div></div>
+                </div>
+                <div class="marze-bar-wrap"><div class="marze-bar-bg"><div class="marze-bar-fill" id="role-mbar"></div></div><div class="marze-bar-label" id="role-mbar-lbl"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="calcRole()">Vypočítat</button>
+            <button class="btn-secondary" onclick="addCart('role')">+ Souhrn</button>
+          </div>
+        </div>
+        
+        <div class="calc-result-col">
+          <div class="result-box" id="role-res">
+            <div class="result-empty"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>Zadejte parametry a klikněte na Vypočítat</div>
+            <div class="result-top">
+              <div class="result-left"><div class="result-eyebrow" id="role-rl">Cena za 1 roli</div><div class="result-amount" id="role-rp">—<span class="result-unit">Kč</span></div></div>
+              <div class="result-sell-chip" id="role-sell-chip" style="display:none"><div class="result-sell-label">Cena pro zákazníka</div><div class="result-sell-val" id="role-rsv">—</div></div>
+            </div>
+            <div class="result-formula" id="role-rf"></div>
+            <div class="result-rows" id="role-rb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="section" id="s-vysek">
+      <div class="page-header">
+        <div class="page-title">⭕ Kruhový výsek</div>
+        <div class="page-sub">průměr (m) × průměr (m) × cena (Kč/m²) × 1,5</div>
+      </div>
+      <div class="calc-layout">
+        <div class="card">
+          <div class="card-header"><div class="card-header-icon orange" data-ico="ruler"></div><div class="card-header-text"><div class="card-title">Parametry výseku</div></div></div>
+          <div class="schema-wrap">
+            <svg viewBox="0 0 260 130" width="100%" style="max-width:240px;font-family:Inter,sans-serif">
+              <circle cx="130" cy="68" r="50" fill="var(--accent-light)" stroke="var(--accent)" stroke-width="2"/>
+              <circle cx="130" cy="68" r="10" fill="var(--accent)" opacity=".2" stroke="var(--accent)" stroke-width="1.5"/>
+              <line x1="80" y1="68" x2="180" y2="68" stroke="var(--blue)" stroke-width="2" marker-start="url(#ms2)" marker-end="url(#me2)"/>
+              <text x="130" y="108" text-anchor="middle" font-size="10" fill="var(--blue)" font-weight="700">průměr (m)</text>
+              <text x="130" y="52" text-anchor="middle" font-size="10" fill="var(--accent)" font-weight="700">× koeficient 1,5</text>
+              <defs>
+                <marker id="ms2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6,0L0,3L6,6" fill="none" stroke="var(--blue)" stroke-width="1"/></marker>
+                <marker id="me2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0L6,3L0,6" fill="none" stroke="var(--blue)" stroke-width="1"/></marker>
+              </defs>
+            </svg>
+          </div>
+          <div class="form-grid">
+            <div class="form-col"><label class="field-label">Výrobce</label><select class="field-select" id="vysek-vyrobce" onchange="fillTypy('vysek')"><option value="">— Vyberte výrobce —</option><option>MIRKA</option><option>DEERFOS</option><option>APE</option></select></div>
+            <div class="form-col"><label class="field-label">Typ materiálu</label><select class="field-select" id="vysek-typ" onchange="fillZrna('vysek')"><option value="">— Nejprve výrobce —</option></select></div>
+            <div class="form-col full"><label class="field-label">Zrnitost</label><select class="field-select" id="vysek-zrno"><option value="">— Nejprve typ —</option></select></div>
+            <div class="form-col full"><div class="mat-info-card" id="vysek-matinfo"></div></div>
+            <div class="form-col"><label class="field-label">Průměr výseku (mm)</label><input type="number" class="field-input" id="vysek-prumer" placeholder="např. 370" min="1" onkeydown="ec(event,'calcVysek')"><span class="field-hint">Koef. 1,5 je zahrnut</span></div>
+            <div class="form-col"><label class="field-label">Počet kusů</label><input type="number" class="field-input" id="vysek-pocet" value="1" min="1" onkeydown="ec(event,'calcVysek')"></div>
+            <div class="form-col full">
+              <div class="zip-toggle" id="vysek-zip-toggle" onclick="zipToggle('vysek')">
+                <div class="zip-toggle-left"><div class="zip-toggle-title">Suchý zip / samolepka</div><div class="zip-toggle-sub">Příplatek +199 Kč/m²</div></div>
+                <button class="zip-switch" id="vysek-zip-sw"></button>
+              </div>
+            </div>
+            <div class="form-col full">
+              <div class="marze-wrap">
+                <div class="marze-top">
+                  <div class="form-col"><label class="field-label">Rabat (%)</label><input type="number" class="field-input" id="vysek-marze" placeholder="0" min="0" step="1" oninput="updM('vysek')" onkeydown="ec(event,'calcVysek')"></div>
+                  <div class="marze-display"><div class="marze-display-label">Cena pro zákazníka</div><div class="marze-display-val" id="vysek-mv">—</div></div>
+                </div>
+                <div class="marze-bar-wrap"><div class="marze-bar-bg"><div class="marze-bar-fill" id="vysek-mbar"></div></div><div class="marze-bar-label" id="vysek-mbar-lbl"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="calcVysek()">Vypočítat</button>
+            <button class="btn-secondary" onclick="addCart('vysek')">+ Souhrn</button>
+          </div>
+        </div>
+        <div class="calc-result-col">
+          <div class="result-box" id="vysek-res">
+            <div class="result-empty"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>Zadejte parametry a klikněte na Vypočítat</div>
+            <div class="result-top">
+              <div class="result-left"><div class="result-eyebrow" id="vysek-rl">Cena za 1 kus</div><div class="result-amount" id="vysek-rp">—<span class="result-unit">Kč</span></div></div>
+              <div class="result-sell-chip" id="vysek-sell-chip" style="display:none"><div class="result-sell-label">Cena pro zákazníka</div><div class="result-sell-val" id="vysek-rsv">—</div></div>
+            </div>
+            <div class="result-formula" id="vysek-rf"></div>
+            <div class="result-rows" id="vysek-rb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="section" id="s-list">
+      <div class="page-header">
+        <div class="page-title">📄 Listy</div>
+        <div class="page-sub">šířka (m) × délka (m) × cena materiálu (Kč/m²)</div>
+      </div>
+      <div class="calc-layout">
+        <div class="card">
+          <div class="card-header"><div class="card-header-icon green" data-ico="ruler"></div><div class="card-header-text"><div class="card-title">Parametry listu</div></div></div>
+          <div class="schema-wrap">
+            <svg viewBox="0 0 280 120" width="100%" style="max-width:260px;font-family:Inter,sans-serif">
+              <rect x="30" y="20" width="170" height="76" rx="7" fill="var(--green-light)" stroke="var(--green)" stroke-width="2"/>
+              <line x1="30" y1="10" x2="200" y2="10" stroke="var(--accent)" stroke-width="1.5" marker-start="url(#ms3)" marker-end="url(#me3)"/>
+              <text x="115" y="6" text-anchor="middle" font-size="10" fill="var(--accent)" font-weight="700">délka listu (mm)</text>
+              <line x1="218" y1="20" x2="218" y2="96" stroke="var(--green)" stroke-width="1.5" marker-start="url(#ms3)" marker-end="url(#me3)"/>
+              <text x="256" y="62" text-anchor="middle" font-size="10" fill="var(--green)" font-weight="700">šířka (mm)</text>
+              <text x="115" y="64" text-anchor="middle" font-size="14" fill="var(--green)" font-weight="800">LIST</text>
+              <defs>
+                <marker id="ms3" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6,0L0,3L6,6" fill="none" stroke="var(--accent)" stroke-width="1"/></marker>
+                <marker id="me3" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0L6,3L0,6" fill="none" stroke="var(--accent)" stroke-width="1"/></marker>
+              </defs>
+            </svg>
+          </div>
+          <div class="form-grid">
+            <div class="form-col"><label class="field-label">Výrobce</label><select class="field-select" id="list-vyrobce" onchange="fillTypy('list')"><option value="">— Vyberte výrobce —</option><option>MIRKA</option><option>DEERFOS</option><option>APE</option></select></div>
+            <div class="form-col"><label class="field-label">Typ materiálu</label><select class="field-select" id="list-typ" onchange="fillZrna('list')"><option value="">— Nejprve výrobce —</option></select></div>
+            <div class="form-col full"><label class="field-label">Zrnitost</label><select class="field-select" id="list-zrno"><option value="">— Nejprve typ —</option></select></div>
+            <div class="form-col full"><div class="mat-info-card" id="list-matinfo"></div></div>
+            <div class="form-col"><label class="field-label">Šířka listu (mm)</label><input type="number" class="field-input" id="list-sirka" placeholder="např. 115" min="1" onkeydown="ec(event,'calcList')"></div>
+            <div class="form-col"><label class="field-label">Délka listu (mm)</label><input type="number" class="field-input" id="list-delka" placeholder="např. 280" min="1" onkeydown="ec(event,'calcList')"></div>
+            <div class="form-col"><label class="field-label">Počet kusů</label><input type="number" class="field-input" id="list-pocet" value="1" min="1" onkeydown="ec(event,'calcList')"></div>
+            <div class="form-col full">
+              <div class="zip-toggle" id="list-zip-toggle" onclick="zipToggle('list')">
+                <div class="zip-toggle-left"><div class="zip-toggle-title">Suchý zip / samolepka</div><div class="zip-toggle-sub">Příplatek +199 Kč/m²</div></div>
+                <button class="zip-switch" id="list-zip-sw"></button>
+              </div>
+            </div>
+            <div class="form-col full">
+              <div class="marze-wrap">
+                <div class="marze-top">
+                  <div class="form-col"><label class="field-label">Rabat (%)</label><input type="number" class="field-input" id="list-marze" placeholder="0" min="0" step="1" oninput="updM('list')" onkeydown="ec(event,'calcList')"></div>
+                  <div class="marze-display"><div class="marze-display-label">Cena pro zákazníka</div><div class="marze-display-val" id="list-mv">—</div></div>
+                </div>
+                <div class="marze-bar-wrap"><div class="marze-bar-bg"><div class="marze-bar-fill" id="list-mbar"></div></div><div class="marze-bar-label" id="list-mbar-lbl"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="calcList()">Vypočítat</button>
+            <button class="btn-secondary" onclick="addCart('list')">+ Souhrn</button>
+          </div>
+        </div>
+        <div class="calc-result-col">
+          <div class="result-box" id="list-res">
+            <div class="result-empty"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>Zadejte parametry a klikněte na Vypočítat</div>
+            <div class="result-top">
+              <div class="result-left"><div class="result-eyebrow" id="list-rl">Cena za 1 list</div><div class="result-amount" id="list-rp">—<span class="result-unit">Kč</span></div></div>
+              <div class="result-sell-chip" id="list-sell-chip" style="display:none"><div class="result-sell-label">Cena pro zákazníka</div><div class="result-sell-val" id="list-rsv">—</div></div>
+            </div>
+            <div class="result-formula" id="list-rf"></div>
+            <div class="result-rows" id="list-rb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="section" id="s-pas">
+      <div class="page-header">
+        <div class="page-title">🔗 Nekonečné pásy</div>
+        <div class="page-sub">šířka (m) × délka (m) × cena (Kč/m²) + cena spoje</div>
+      </div>
+      <div class="calc-layout">
+        <div class="card">
+          <div class="card-header"><div class="card-header-icon blue" data-ico="belt"></div><div class="card-header-text"><div class="card-title">Parametry pásu</div></div></div>
+          <div class="schema-wrap">
+            <svg viewBox="0 0 340 100" width="100%" style="max-width:320px;font-family:Inter,sans-serif">
+              <ellipse cx="55" cy="50" rx="28" ry="42" fill="none" stroke="#8e8e93" stroke-width="2"/>
+              <ellipse cx="285" cy="50" rx="28" ry="42" fill="none" stroke="#8e8e93" stroke-width="2"/>
+              <line x1="55" y1="8" x2="285" y2="8" stroke="#8e8e93" stroke-width="1.5"/>
+              <line x1="55" y1="92" x2="285" y2="92" stroke="#8e8e93" stroke-width="1.5"/>
+              <rect x="55" y="9" width="230" height="82" fill="var(--accent-light)" opacity=".6"/>
+              <line x1="60" y1="50" x2="280" y2="50" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5,4" marker-start="url(#ms4)" marker-end="url(#me4)"/>
+              <text x="170" y="44" text-anchor="middle" font-size="10" fill="var(--accent)" font-weight="700">délka pásu (mm)</text>
+              <text x="170" y="80" text-anchor="middle" font-size="10" fill="#880e4f" font-weight="700">+ cena spoje</text>
+              <line x1="326" y1="8" x2="326" y2="92" stroke="var(--blue)" stroke-width="1.5" marker-start="url(#ms4)" marker-end="url(#me4)"/>
+              <text x="336" y="54" font-size="10" fill="var(--blue)" font-weight="700">š</text>
+              <defs>
+                <marker id="ms4" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M6,0L0,3L6,6" fill="none" stroke="var(--accent)" stroke-width="1"/></marker>
+                <marker id="me4" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0L6,3L0,6" fill="none" stroke="var(--accent)" stroke-width="1"/></marker>
+              </defs>
+            </svg>
+          </div>
+          <div class="form-grid">
+            <div class="form-col"><label class="field-label">Výrobce</label><select class="field-select" id="pas-vyrobce" onchange="fillTypy('pas')"><option value="">— Vyberte výrobce —</option><option>MIRKA</option><option>DEERFOS</option></select></div>
+            <div class="form-col"><label class="field-label">Typ materiálu</label><select class="field-select" id="pas-typ" onchange="fillZrna('pas')"><option value="">— Nejprve výrobce —</option></select></div>
+            <div class="form-col full"><label class="field-label">Zrnitost</label><select class="field-select" id="pas-zrno"><option value="">— Nejprve typ —</option></select></div>
+            <div class="form-col full"><div class="mat-info-card" id="pas-matinfo"></div></div>
+            <div class="form-col"><label class="field-label">Šířka pásu (mm)</label><input type="number" class="field-input" id="pas-sirka" placeholder="např. 150" min="1" oninput="autoSpoj()" onkeydown="ec(event,'calcPas')"></div>
+            <div class="form-col"><label class="field-label">Délka pásu (mm)</label><input type="number" class="field-input" id="pas-delka" placeholder="např. 6650" min="1" oninput="autoSpoj()" onkeydown="ec(event,'calcPas')"></div>
+            <div class="form-col"><label class="field-label">Počet kusů</label><input type="number" class="field-input" id="pas-pocet" value="1" min="1" onkeydown="ec(event,'calcPas')"></div>
+            <input type="hidden" id="pas-spoj">
+            <span id="pas-spoj-hint" style="display:none"></span>
+            <div class="form-col full">
+              <div class="marze-wrap">
+                <div class="marze-top">
+                  <div class="form-col"><label class="field-label">Rabat (%)</label><input type="number" class="field-input" id="pas-marze" placeholder="0" min="0" step="1" oninput="updM('pas')" onkeydown="ec(event,'calcPas')"></div>
+                  <div class="marze-display"><div class="marze-display-label">Cena pro zákazníka</div><div class="marze-display-val" id="pas-mv">—</div></div>
+                </div>
+                <div class="marze-bar-wrap"><div class="marze-bar-bg"><div class="marze-bar-fill" id="pas-mbar"></div></div><div class="marze-bar-label" id="pas-mbar-lbl"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="calcPas()">Vypočítat</button>
+            <button class="btn-secondary" onclick="addCart('pas')">+ Souhrn</button>
+          </div>
+        </div>
+        <div class="calc-result-col">
+          <div class="result-box" id="pas-res">
+            <div class="result-empty"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>Zadejte parametry a klikněte na Vypočítat</div>
+            <div class="result-top">
+              <div class="result-left"><div class="result-eyebrow" id="pas-rl">Cena za 1 pás</div><div class="result-amount" id="pas-rp">—<span class="result-unit">Kč</span></div></div>
+              <div class="result-sell-chip" id="pas-sell-chip" style="display:none"><div class="result-sell-label">Cena pro zákazníka</div><div class="result-sell-val" id="pas-rsv">—</div></div>
+            </div>
+            <div class="result-formula" id="pas-rf"></div>
+            <div class="result-rows" id="pas-rb"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="section" id="s-kosik">
+      <div class="page-header"><div class="page-title">🛒 Souhrn zakázky</div></div>
+      
+      <div id="print-header-inner" style="display:none;margin-bottom:20pt">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;width:100%;padding-bottom:14pt;border-bottom:2.5pt solid #1d1d1f">
+          <div>
+            <div style="font-size:22pt;font-weight:900;letter-spacing:-1pt;color:#1d1d1f;line-height:1">INGTECH</div>
+            <div style="font-size:9pt;color:#636366;margin-top:3pt">Váš partner pro dokonalé povrchy · ingtech.cz · +420 321 768 023</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:13pt;font-weight:700;color:#1d1d1f">Kalkulace zakázky</div>
+            <div id="print-date" style="font-size:9pt;color:#636366;margin-top:2pt"></div>
+            <div style="font-size:9pt;color:#636366">Ceník 2026 · Ceny bez DPH</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-header-icon blue" data-ico="cart"></div><div class="card-header-text"><div class="card-title">Položky zakázky</div><div class="card-subtitle">Nákupní i zákaznické ceny</div></div></div>
+        <div id="cart-items"></div>
+        <div id="cart-sum-wrap" style="display:none">
+          <div class="cart-summary" id="cart-sum"></div>
+          <div class="btn-row" style="margin-top:14px">
+            <button class="btn-ghost" onclick="clearCart()">🗑 Vymazat vše</button>
+            <button class="btn-primary" onclick="printDoc()">🖨️ Tisk / PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="section" id="s-historie">
+      <div class="page-header"><div class="page-title">🕐 Historie kalkulací</div></div>
+      <div class="card">
+        <div class="card-header"><div class="card-header-icon blue" data-ico="clock"></div><div class="card-header-text"><div class="card-title">Posledních 20 výpočtů</div><div class="card-subtitle">Aktuální session</div></div></div>
+        <div id="hist-list"><div class="cart-empty-state"><div class="cart-empty-icon" data-ico="clock"></div><div class="cart-empty-title">Zatím žádné kalkulace</div><div class="cart-empty-sub">Výsledky se ukládají automaticky</div></div></div>
+      </div>
+    </div>
+
+    
+    <div class="section" id="s-materialy">
+      <div class="page-header"><div class="page-title">📋 Ceník materiálů</div><div class="page-sub">Kč/m² · INGTECH Ceník 2026 · bez DPH</div></div>
+      <div class="card">
+        <div class="filter-bar">
+          <button class="chip on" onclick="flt('vse',this)">Vše</button>
+          <button class="chip" onclick="flt('MIRKA',this)">MIRKA</button>
+          <button class="chip" onclick="flt('DEERFOS',this)">DEERFOS</button>
+          <button class="chip" onclick="flt('APE',this)">APE 377</button>
+          <input type="text" class="search-field" placeholder="🔍 Hledat..." oninput="fltS(this.value)">
+        </div>
+        <div class="tbl-wrap"><table><thead><tr><th>Výrobce</th><th>Typ</th><th>Zrno</th><th>Podklad</th><th>P16</th><th>P24</th><th>P36</th><th>P40</th><th>P50</th><th>P60</th><th>P80</th><th>P100</th><th>P120</th><th>P150</th><th>P180</th><th>P220</th><th>P240</th><th>P280</th><th>P320</th><th>P400</th><th>P500-800</th><th>P1000+</th><th>VF360</th><th>UF1500</th></tr></thead><tbody id="mat-tbody"></tbody></table></div>
+        <div class="notice"><span style="font-size:16px">ℹ️</span><span><strong>Suchý zip nebo samolepka:</strong> cena materiálu + 199 Kč/m² &nbsp;|&nbsp; <strong>Mirlon:</strong> VF360 (Very Fine) = 680 Kč/m², UF1500 (Ultra Fine) = 693 Kč/m²</span></div>
+      </div>
+    </div>
+
+    
+    <div class="section" id="s-spoje">
+      <div class="page-header"><div class="page-title">🔩 Ceník spojů pásů</div><div class="page-sub">Cena dle šířky a délky pásu · Ostatní dle dohody</div></div>
+      <div class="card">
+        <div class="spoje-grid">
+          <div class="spoje-card"><div class="spoje-head">Šíře <em>0–100 mm</em></div><div class="spoje-row"><span class="spoje-range">200–1 000 mm</span><span class="spoje-price">7,00 Kč</span></div><div class="spoje-row"><span class="spoje-range">1 001–2 000 mm</span><span class="spoje-price">16,00 Kč</span></div><div class="spoje-row"><span class="spoje-range">2 001–3 000 mm</span><span class="spoje-price">21,00 Kč</span></div><div class="spoje-row"><span class="spoje-range">3 001–5 000 mm</span><span class="spoje-price">28,70 Kč</span></div><div class="spoje-row"><span class="spoje-range">5 001–10 000 mm</span><span class="spoje-price">27,00 Kč</span></div></div>
+          <div class="spoje-card"><div class="spoje-head">Šíře <em>101–200 mm</em></div><div class="spoje-row"><span class="spoje-range">200–1 000 mm</span><span class="spoje-price">19,50 Kč</span></div><div class="spoje-row"><span class="spoje-range">1 001–2 000 mm</span><span class="spoje-price">26,00 Kč</span></div><div class="spoje-row"><span class="spoje-range">2 001–3 000 mm</span><span class="spoje-price">33,80 Kč</span></div><div class="spoje-row"><span class="spoje-range">3 001–5 000 mm</span><span class="spoje-price">38,90 Kč</span></div><div class="spoje-row"><span class="spoje-range">5 001–7 000 mm</span><span class="spoje-price">44,00 Kč</span></div><div class="spoje-row"><span class="spoje-range">7 001–10 000 mm</span><span class="spoje-price">53,00 Kč</span></div></div>
+          <div class="spoje-card"><div class="spoje-head">Šíře <em>201–300 mm</em></div><div class="spoje-row"><span class="spoje-range">200–1 000 mm</span><span class="spoje-price">22,20 Kč</span></div><div class="spoje-row"><span class="spoje-range">1 001–2 000 mm</span><span class="spoje-price">28,70 Kč</span></div><div class="spoje-row"><span class="spoje-range">2 001–3 000 mm</span><span class="spoje-price">36,50 Kč</span></div><div class="spoje-row"><span class="spoje-range">3 001–5 000 mm</span><span class="spoje-price">41,50 Kč</span></div><div class="spoje-row"><span class="spoje-range">5 001–10 000 mm</span><span class="spoje-price">71,00 Kč</span></div></div>
+          <div class="spoje-card"><div class="spoje-head">Šíře <em>301–1 600 mm</em></div><div class="spoje-row"><span class="spoje-range">301–600 mm · do 5 000</span><span class="spoje-price">69,00 Kč</span></div><div class="spoje-row"><span class="spoje-range">601–900 mm · do 5 000</span><span class="spoje-price">97,00 Kč</span></div><div class="spoje-row"><span class="spoje-range">901–1 600 mm · do 5 000</span><span class="spoje-price">166,00 Kč</span></div><div class="spoje-row" style="color:var(--text3);font-size:12px"><span>Ostatní rozměry dle dohody</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="section" id="s-info">
+      <div class="page-header"><div class="page-title">ℹ️ Průvodce</div></div>
+      <div class="info-grid">
+        <div class="info-card"><div class="info-card-icon" data-ico="roll"></div><div class="info-card-title">Role</div><div class="info-card-text">šířka (m) × délka (m) × cena<br><br>Př: 0,150 × 50 × 184 = <strong>1 380 Kč</strong></div></div>
+        <div class="info-card"><div class="info-card-icon" data-ico="disc"></div><div class="info-card-title">Kruhový výsek</div><div class="info-card-text">průměr² × cena × 1,5<br><br>Př: 0,37² × 184 × 1,5 = <strong>37,80 Kč</strong></div></div>
+        <div class="info-card"><div class="info-card-icon" data-ico="sheet"></div><div class="info-card-title">List</div><div class="info-card-text">šířka × délka × cena<br><br>Př: 0,115 × 0,280 × 184 = <strong>6,00 Kč</strong></div></div>
+        <div class="info-card"><div class="info-card-icon" data-ico="belt"></div><div class="info-card-title">Nekonečný pás</div><div class="info-card-text">š × d × cena + spoj<br><br>Př: 0,150 × 6,650 × 184 + 44 = <strong>227,60 Kč</strong></div></div>
+        <div class="info-card"><div class="info-card-icon" data-ico="hook"></div><div class="info-card-title">Zip / samolepka</div><div class="info-card-text">U rolí, výseků a listů:<br><strong>+199 Kč za každý m²</strong></div></div>
+        <div class="info-card"><div class="info-card-icon" data-ico="gear"></div><div class="info-card-title">Typy spojů</div><div class="info-card-text"><strong>A</strong> — papír, bez kompenzace<br><strong>B</strong> — plátno, s kompenzací<br><strong>T</strong> — lepicí páska na zadní straně</div></div>
+      </div>
+      <div class="card"><div class="card-header"><div class="card-header-icon orange" data-ico="zap"></div><div class="card-header-text"><div class="card-title">Příklady výpočtů — Ceník 2026</div><div class="card-subtitle">Avomax P80 · dle ceníku INGTECH</div></div></div>
+        <div class="code-block">
+<span class="co"># Pás — Avomax P80, 150×6650mm + spoj</span>
+Cena = 184 × 0,150 × 6,650 + 44 = <span class="cs">227,60 Kč/ks</span>
+
+<span class="co"># Role — Avomax P80, 150mm × 50m</span>
+Cena = 184 × 0,150 × 50 = <span class="cs">1 380,00 Kč/roli</span>
+
+<span class="co"># Výsek — Avomax P80, ⌀370mm</span>
+Cena = 184 × 0,370 × 0,370 × 1,5 = <span class="cs">37,80 Kč/ks</span>
+
+<span class="co"># List — Avomax P80, 115×280mm</span>
+Cena = 184 × 0,115 × 0,280 = <span class="cs">6,00 Kč/ks</span>
+        </div>
+      </div>
+      <div class="card"><div class="card-header"><div class="card-header-icon orange" data-ico="ruler"></div><div class="card-header-text"><div class="card-title">Vzorce</div></div></div>
+        <div class="code-block"><span class="co"># 1. ROLE</span>
+Cena = <span class="cv">šířka_m</span> × <span class="cv">délka_m</span> × <span class="cv">cena_m2</span>
+
+<span class="co"># 2. KRUHOVÝ VÝSEK</span>
+Cena = <span class="cv">průměr_m</span> × <span class="cv">průměr_m</span> × <span class="cv">cena_m2</span> × <span class="cs">1,5</span>
+
+<span class="co"># 3. LIST</span>
+Cena = <span class="cv">šířka_m</span> × <span class="cv">délka_m</span> × <span class="cv">cena_m2</span>
+
+<span class="co"># 4. NEKONEČNÝ PÁS</span>
+Cena = <span class="cv">šířka_m</span> × <span class="cv">délka_m</span> × <span class="cv">cena_m2</span> + <span class="cv">cena_spoje</span>
+
+<span class="co"># Zip / samolepka (role, výsek, list)</span>
+<span class="cs">efektivní_m2 = cena_m2 + 199</span>
+
+<span class="co"># Zákaznická cena s rabatem</span>
+<span class="cs">cena_zákazník = nákupní × (1 − rabat / 100)</span>
+<span class="co"># Příklad: 100 Kč s rabatem 25 % → zákazník platí 75 Kč</span></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+
+<nav class="tab-bar" id="tab-bar">
+  <button class="tab-item active" data-nav="dash" onclick="tabNav('dash',this)"><span class="tab-ico" data-ico="home"></span>Přehled</button>
+  <button class="tab-item" data-nav="role" onclick="tabNav('role',this)"><span class="tab-ico" data-ico="roll"></span>Role</button>
+  <button class="tab-item" data-nav="vysek" onclick="tabNav('vysek',this)"><span class="tab-ico" data-ico="disc"></span>Výsek</button>
+  <button class="tab-item" data-nav="pas" onclick="tabNav('pas',this)"><span class="tab-ico" data-ico="belt"></span>Pásy</button>
+  <button class="tab-item" data-nav="more" onclick="tabNav('more',this)"><span class="tab-ico" data-ico="more"></span>Více<span class="tab-badge" id="tab-badge" style="display:none">0</span></button>
+</nav>
+
+
+<div id="drawer" style="display:none;position:fixed;bottom:0;left:0;right:0;top:0;z-index:600" onclick="closeDrawer()">
+  <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-radius:22px 22px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -4px 40px rgba(0,0,0,.3);max-height:70vh;overflow-y:auto" onclick="event.stopPropagation()">
+    <div style="width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 18px"></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      <button class="drawer-btn" onclick="navAndClose('list')"><span class="dbico" data-ico="sheet"></span><span>Listy</span></button>
+      <button class="drawer-btn" onclick="navAndClose('kosik')"><span class="dbico" data-ico="cart"></span><span>Souhrn</span></button>
+      <button class="drawer-btn" onclick="navAndClose('historie')"><span class="dbico" data-ico="clock"></span><span>Historie</span></button>
+      <button class="drawer-btn" onclick="navAndClose('materialy')"><span class="dbico" data-ico="table"></span><span>Materiály</span></button>
+      <button class="drawer-btn" onclick="navAndClose('spoje')"><span class="dbico" data-ico="link"></span><span>Spoje</span></button>
+      <button class="drawer-btn" onclick="navAndClose('info')"><span class="dbico" data-ico="info"></span><span>Průvodce</span></button>
+      <button class="drawer-btn" onclick="toggleDark();closeDrawer()"><span class="dbico" id="drawer-dark-ico" data-ico="dark"></span><span>Vzhled</span></button>
+      <button class="drawer-btn" onclick="printDoc();closeDrawer()"><span class="dbico" data-ico="print"></span><span>Tisk</span></button>
+    </div>
+  </div>
+</div>
+
+<style>
+.drawer-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:16px 8px;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:16px;cursor:pointer;
+  font-size:11px;font-weight:700;color:var(--text);
+  font-family:inherit;transition:all .15s;
+  min-height:76px;
+}
+.drawer-btn:active{transform:scale(.93);background:var(--card3)}
+#drawer{background:rgba(0,0,0,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+#drawer>div{animation:slideUp .25s cubic-bezier(.4,0,.2,1)}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.dbico{display:flex;align-items:center;justify-content:center;width:28px;height:28px}
+.dbico svg{width:28px;height:28px;stroke:var(--blue);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<script>
+
+
+var aislktt=0x60; var hefstnm=0x93; var jfrohty=0xee; var rfbftvs=0x7e; var jnwcxzg=0x61; var fayyzhl=0xae;
+// ═══════════════════════════════════════
+// DATA — CENÍK 2026
+// ═══════════════════════════════════════
+const MAT=[
+  {v:'MIRKA',t:'Avomax',z:'Korund',p:'Papír',
+   popis:'Univerzální brusný papír vhodný zejména na broušení dřeva. Nabízí velmi dobrou účinnost i při broušení materiálů, které se snadno zanášejí. Excelentní výkony téměř ve všech průmyslových aplikacích.',
+   pouziti:['Dřevo','Univerzální','Průmysl'],zrn:'P40–P240',
+   c:{P40:257,P60:237,P80:184,P100:184,P120:184,P150:184,P180:184,P220:184,P240:184}},
+  {v:'MIRKA',t:'Ultimax',z:'Speciální korund sel. posyp',p:'Papír',
+   popis:'Speciální brusný papír se selektivním posypem vhodný zejména na broušení tvrdého dřeva a tvrdých materiálů. Nabízí agresivnější výkon, chladný brus a extra dlouhou životnost.',
+   pouziti:['Tvrdé dřevo','Tvrdé materiály','Dlouhá životnost'],zrn:'P40–P320',
+   c:{P40:372,P60:331,P80:298,P100:298,P120:298,P150:298,P180:298,P240:298,P320:298}},
+  {v:'MIRKA',t:'Gold Max',z:'Korund',p:'Papír',
+   popis:'Brusný papír se stearátovou vrstvou pro střední a jemné broušení. Tepelně zpracovaný korund umožňuje velkou řeznou rychlost i na tvrdých lacích. Speciální polootevřený posyp minimalizuje zanášení.',
+   pouziti:['Laky','Jemné broušení','Střední broušení'],zrn:'P320–P800',
+   c:{P320:220,P400:220,'P500-800':220}},
+  {v:'MIRKA',t:'Sica F.S.',z:'Karbid křemíku',p:'Papír',
+   popis:'Brusný papír se stearátovým posypem vhodný zejména na broušení laků. Minimalizuje znečišťování prachem a napomáhá tak k dokonalé povrchové úpravě pro nanesení čirého laku.',
+   pouziti:['Laky','Povrchová úprava','Příprava pro lak'],zrn:'P1000–P1500',
+   c:{'P1000+':308}},
+  {v:'MIRKA',t:'Hiolit XO',z:'Korund',p:'Plátno X',
+   popis:'Brusné plátno X s vysokou životností, vhodné pro agresivní broušení povrchů. Vynikajících výsledků dosahuje zejména na náročných materiálech, kde je potřeba velký úběr materiálu.',
+   pouziti:['Kovy','Dřevo','Agresivní broušení','Velký úběr'],zrn:'P36–P240',
+   c:{P36:794,P40:717,P50:705,P60:630,P80:544,P100:544,P120:544,P150:544,P180:544,P240:544}},
+  {v:'MIRKA',t:'Hiolit JF',z:'Korund',p:'Flexibilní plátno J',
+   popis:'Flexibilní brusné plátno JF zaměřené na zpracování kovů a dřeva. Efektivní zejména při broušení profilů a dalších míst, kde je vyžadována flexibilita a vysoká kvalita povrchové úpravy. Vhodné také pro broušení barevných kovů.',
+   pouziti:['Kovy','Dřevo','Profily','Barevné kovy','Flexibilní'],zrn:'P60–P400',
+   c:{P60:678,P80:558,P100:558,P120:558,P150:558,P180:558,P220:558,P240:558,P280:558,P320:558,P400:558}},
+  {v:'MIRKA',t:'Mirlon',z:'Korund',p:'Netkaná textilie',
+   popis:'Flexibilní brusné rouno s trojrozměrným vláknem. Díky speciální konstrukci se snadno používá na profilované povrchy a nabízí vynikající výsledky. Ideální pro matování povrchů a vytváří vynikající základ pro další lakované vrstvy.',
+   pouziti:['Matování','Profily','Příprava pro lak','Jemné opracování'],zrn:'VF360 / UF1500',
+   c:{VF360:680,UF1500:693}},
+  {v:'APE',t:'APE 377',z:'Korund',p:'Papír',
+   popis:'Brusný papír vhodný zejména na hrubé broušení. Robustní konstrukce zajišťuje vysoký výkon při odebírání materiálu v nejnáročnějších podmínkách.',
+   pouziti:['Hrubé broušení','Dřevo','Odebírání materiálu'],zrn:'P24–P36',
+   c:{P24:193,P36:193}},
+  {v:'DEERFOS',t:'XA',z:'Korund',p:'Plátno X',
+   popis:'Brusné plátno X s dobrým poměrem cena/výkon pro broušení dřeva a kovů. Má velkou odolnost proti opotřebení hran. V hrubých zrnitostech je dobré pro agresivní broušení.',
+   pouziti:['Dřevo','Kovy','Agresivní broušení','Cena/výkon'],zrn:'P16–P280',
+   c:{P16:797,P24:513,P36:465,P40:421,P50:419,P60:412,P80:404,P100:363,P120:363,P150:363,P180:363,P220:363,P240:363,P280:363}},
+  {v:'DEERFOS',t:'JA 165',z:'Korund',p:'Flexibilní plátno J',
+   popis:'Flexibilní brusné plátno pro broušení dřeva, laků, kovů a plastů. Vhodný zejména pro broušení profilů, tvarů a dalších míst, kde je vyžadována flexibilita. Uzavřený posyp zvyšuje životnost. Skvělé i pro ruční broušení.',
+   pouziti:['Dřevo','Laky','Kovy','Plasty','Profily','Ruční broušení'],zrn:'P60–P400',
+   c:{P60:307,P80:307,P100:307,P120:307,P150:307,P180:307,P220:307,P240:307,P280:307,P320:307,P400:307}},
+  {v:'DEERFOS',t:'XZ 677',z:'Zirkon',p:'Polyester',
+   popis:'Brusný polyester se zirkonkorundovým zrnem pro agresivní strojní broušení kovů a tvrdých materiálů. Díky polyesterovému nosnému materiálu je odolný a snese hodně tvrdé zacházení. Materiál má velmi dlouhou životnost.',
+   pouziti:['Kovy','Tvrdé materiály','Strojní broušení','Extra životnost'],zrn:'P24–P120',
+   c:{P24:972,P36:876,P40:854,P60:712,P80:629,P100:629,P120:629}},
+  {v:'DEERFOS',t:'BORA',z:'Keramika',p:'Polyester',
+   popis:'Brusný polyester s keramickým zrnem a přetěrem chladící vrstvy. Profesionální kvalita, samoostřící efekt, chladný brus, vysoká odolnost vůči opotřebení, agresivní broušení, extra dlouhá životnost. Skvělý materiál pro broušení všech typů ocelí, litiny a neželezných kovů.',
+   pouziti:['Oceli','Litina','Neželezné kovy','Samoostřící','Chladný brus'],zrn:'P24–P120',
+   c:{P24:1488,P36:1274,P40:1221,P50:1199,P60:1145,P80:1051,P100:1019,P120:1019}},
+  {v:'DEERFOS',t:'BORA 3',z:'Keramika',p:'Flexibilní plátno J',
+   popis:'Flexibilní brusné plátno s keramickým zrnem a přetěrem chladící vrstvy. Profesionální kvalita, samoostřící efekt, chladný brus, vysoká odolnost vůči opotřebení, extra dlouhá životnost. Skvělý materiál pro tvarové broušení všech typů ocelí, litiny a neželezných kovů.',
+   pouziti:['Tvarové broušení','Oceli','Litina','Flexibilní','Samoostřící'],zrn:'P60–P220',
+   c:{P60:1010,P80:920,P100:903,P120:903,P150:903,P180:903,P220:903}},
+];
+const TYPY={MIRKA:['Avomax','Ultimax','Gold Max','Sica F.S.','Hiolit XO','Hiolit JF','Mirlon'],DEERFOS:['XA','JA 165','XZ 677','BORA','BORA 3'],APE:['APE 377']};
+const ZORD=['P16','P24','P36','P40','P50','P60','P80','P100','P120','P150','P180','P220','P240','P280','P320','P400','P500-800','P1000+','VF360','UF1500'];
+const ICONS={role:'🔄',vysek:'⭕',list:'📄',pas:'🔗'};
+const ZIP_STATE={role:false,vysek:false,list:false};
+let cart=[],hist=[],lastR={},calcCount=0;
+
+// ── Utils ──
+const g=id=>document.getElementById(id);
+const fmt=n=>n.toLocaleString('cs-CZ',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtShort=n=>n>=1000?Math.round(n/100)/10+'k':Math.round(n);
+
+function toast(m,ico=''){
+  const t=g('toast');t.textContent=(ico?ico+' ':'')+m;
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);
+}
+function ec(e,fn){if(e.key==='Enter')window[fn]()}
+
+// ── Navigation ──
+function navBtn(id){
+  const btn=document.querySelector(`.nav-item[data-nav="${id}"]`);
+  nav(id, btn);
+}
+function nav(id, btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  g('s-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function tabNav(id, btn){
+  if(id==='more'){g('drawer').style.display='flex';return}
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-item').forEach(b=>b.classList.remove('active'));
+  g('s-'+id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function navAndClose(id){
+  closeDrawer();
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-item').forEach(b=>b.classList.remove('active'));
+  g('s-'+id).classList.add('active');
+}
+function closeDrawer(){g('drawer').style.display='none'}
+
+// ── Dark mode ──
+
+// ── ZIP toggle (iOS style switch) ──
+function zipToggle(pfx){
+  ZIP_STATE[pfx]=!ZIP_STATE[pfx];
+  const tog=g(pfx+'-zip-toggle');
+  if(ZIP_STATE[pfx])tog.classList.add('on');else tog.classList.remove('on');
+  updM(pfx);
+}
+
+// ── Material lookups ──
+function getMat(v,t){return MAT.find(m=>m.v===v&&m.t===t)}
+
+const BRAND_COLORS={
+  MIRKA:{bg:'#fff3e0',color:'#bf5000'},
+  DEERFOS:{bg:'#e8f5e9',color:'#1a5e20'},
+  APE:{bg:'#fce4ec',color:'#78002e'}
+};
+
+function showMatInfo(pfx){
+  const v=g(pfx+'-vyrobce').value,t=g(pfx+'-typ').value;
+  const card=g(pfx+'-matinfo');
+  if(!card)return;
+  const m=getMat(v,t);
+  if(!m||!m.popis){card.classList.remove('visible');card.innerHTML='';return}
+  const bc=BRAND_COLORS[v]||{bg:'#f5f5f7',color:'#636366'};
+  const tags=(m.pouziti||[]).map(p=>`<span class="mat-tag">${p}</span>`).join('');
+  card.innerHTML=`
+    <div class="mat-info-header">
+      <div class="mat-info-name">${v} ${t}</div>
+      <span class="mat-info-brand" style="background:${bc.bg};color:${bc.color}">${v}</span>
+    </div>
+    <div class="mat-info-text">${m.popis}</div>
+    <div class="mat-info-row">
+      <span class="mat-info-zrn">🔢 ${m.zrn}</span>
+      <span class="mat-info-zrn">📦 ${m.p}</span>
+      ${tags}
+    </div>`;
+  card.classList.add('visible');
+}
+
+function fillTypy(pfx){
+  const v=g(pfx+'-vyrobce').value,ts=g(pfx+'-typ'),zs=g(pfx+'-zrno');
+  ts.innerHTML='<option value="">— Vyberte typ —</option>';
+  zs.innerHTML='<option value="">— Nejprve typ —</option>';
+  const card=g(pfx+'-matinfo');
+  if(card){card.classList.remove('visible');card.innerHTML=''}
+  if(!v) return;
+  let typy = TYPY[v]||[];
+  // U pásů vyřadit Mirlon (netkaná textilie) — nedává se do pásů
+  if(pfx==='pas') typy = typy.filter(t=>t!=='Mirlon');
+  typy.forEach(t=>ts.innerHTML+=`<option>${t}</option>`);
+}
+function fillZrna(pfx){
+  const v=g(pfx+'-vyrobce').value,t=g(pfx+'-typ').value,zs=g(pfx+'-zrno');
+  zs.innerHTML='<option value="">— Vyberte zrnitost —</option>';
+  const m=getMat(v,t);
+  if(m)ZORD.forEach(z=>{if(m.c[z]!==undefined)zs.innerHTML+=`<option value="${z}">${z}  —  ${m.c[z]} Kč/m²</option>`});
+  showMatInfo(pfx);
+}
+function getP(pfx){
+  const v=g(pfx+'-vyrobce').value,t=g(pfx+'-typ').value,z=g(pfx+'-zrno').value;
+  if(!v||!t||!z)return null;
+  const m=getMat(v,t);return m?{cena:m.c[z],label:`${v} ${t} ${z}`}:null;
+}
+
+// ── Spoje ──
+function spojCena(s,d){
+  if(s<=100){if(d<=1000)return 7;if(d<=2000)return 16;if(d<=3000)return 21;if(d<=5000)return 28.7;if(d<=10000)return 27}
+  else if(s<=200){if(d<=1000)return 19.5;if(d<=2000)return 26;if(d<=3000)return 33.8;if(d<=5000)return 38.9;if(d<=7000)return 44;if(d<=10000)return 53}
+  else if(s<=300){if(d<=1000)return 22.2;if(d<=2000)return 28.7;if(d<=3000)return 36.5;if(d<=5000)return 41.5;if(d<=10000)return 71}
+  else if(s<=600){if(d<=5000)return 69}else if(s<=900){if(d<=5000)return 97}else if(s<=1600){if(d<=5000)return 166}
+  return null;
+}
+function autoSpoj(){
+  const s=parseFloat(g('pas-sirka').value),d=parseFloat(g('pas-delka').value);
+  const hint=g('pas-spoj-hint');
+  if(s&&d){const sc=spojCena(s,d);
+    if(sc!==null){g('pas-spoj').value=sc.toFixed(2);hint.textContent=`✓ Z ceníku: ${s}mm šíře, ${d}mm délka → ${sc.toFixed(2)} Kč/spoj`}
+    else{g('pas-spoj').value='';hint.textContent='⚠ Mimo standardní ceník — zadejte cenu dle dohody'}}
+  updM('pas');
+}
+
+// ── Rabat ──
+function updM(pfx){
+  const r=parseFloat(g(pfx+'-marze').value),res=lastR[pfx];
+  const el=g(pfx+'-mv'),bar=g(pfx+'-mbar'),lbl=g(pfx+'-mbar-lbl');
+  if(res&&!isNaN(r)&&r>=0&&r<100){
+    const zakaznik=res.p1*(1-r/100);
+    el.textContent=fmt(zakaznik)+' Kč';
+    const pct=Math.min(r/50*100,100);
+    if(bar){bar.style.width=pct+'%'}
+    if(lbl)lbl.textContent=r>0?'-'+r+'%':'';
+  } else {
+    el.textContent='—';
+    if(bar)bar.style.width='0%';
+    if(lbl)lbl.textContent='';
+  }
+}
+
+// ── Result display ──
+function rw(l,v,hi){return`<div class="rrow"><span class="rrow-lbl">${l}</span><span class="rrow-val${hi?' hi':''}">${v}</span></div>`}
+function showR(pfx,d){
+  lastR[pfx]=d;calcCount++;
+  const box=g(pfx+'-res');
+  box.classList.add('show');
+  g(pfx+'-rl').textContent=d.lbl;
+  g(pfx+'-rp').innerHTML=fmt(d.disp)+'<span class="result-unit"> Kč</span>';
+  g(pfx+'-rf').textContent=d.form;
+  g(pfx+'-rb').innerHTML=d.rows;
+  const m=parseFloat(g(pfx+'-marze').value);
+  const chip=g(pfx+'-sell-chip'),sv=g(pfx+'-rsv');
+  if(!isNaN(m)&&m>0&&m<100){
+    const zakaznik=d.p1*(1-m/100);
+    chip.style.display='block';
+    sv.textContent=fmt(zakaznik)+' Kč (-'+m+'%)';
+  } else chip.style.display='none';
+  updM(pfx);
+  addHist(pfx,d);
+  updateDashStats();
+}
+
+// ── Calculations ──
+function calcRole(){
+  const p=getP('role');if(!p){toast('Vyberte výrobce, typ a zrnitost','⚠️');return}
+  const s=parseFloat(g('role-sirka').value),d=parseFloat(g('role-delka').value),n=parseInt(g('role-pocet').value)||1;
+  if(!s||!d){toast('Zadejte šířku a délku role','⚠️');return}
+  const sm=s/1000,zip=ZIP_STATE.role,cm=zip?p.cena+199:p.cena,p1=sm*d*cm,pt=p1*n;
+  showR('role',{p1,disp:n>1?pt:p1,lbl:n>1?`Celkem (${n} rolí)`:'Cena za 1 roli',
+    form:`${cm} × ${sm.toFixed(3)} × ${d} = ${fmt(p1)} Kč/roli`,
+    rows:rw('Materiál',p.label)+rw('Cena mat.',p.cena+' Kč/m²')+(zip?rw('Zip/samolepka','+199 Kč/m²'):'')+rw('Efektivní cena',cm+' Kč/m²')+rw('Plocha',fmt(sm*d)+' m²')+rw('1 role',fmt(p1)+' Kč')+(n>1?rw('Celkem '+n+' ks',fmt(pt)+' Kč',true):''),
+    desc:`${p.label} · ${s}mm × ${d}m × ${n}ks`,type:'role',n});
+}
+function calcVysek(){
+  const p=getP('vysek');if(!p){toast('Vyberte výrobce, typ a zrnitost','⚠️');return}
+  const pr=parseFloat(g('vysek-prumer').value),n=parseInt(g('vysek-pocet').value)||1;
+  if(!pr){toast('Zadejte průměr výseku','⚠️');return}
+  const pm=pr/1000,zip=ZIP_STATE.vysek,cm=zip?p.cena+199:p.cena,p1=pm*pm*cm*1.5,pt=p1*n;
+  showR('vysek',{p1,disp:n>1?pt:p1,lbl:n>1?`Celkem (${n} ks)`:'Cena za 1 kus',
+    form:`${cm} × ${pm.toFixed(3)}² × 1,5 = ${fmt(p1)} Kč/ks`,
+    rows:rw('Materiál',p.label)+rw('Cena mat.',p.cena+' Kč/m²')+(zip?rw('Zip/samolepka','+199 Kč/m²'):'')+rw('Průměr',pr+' mm')+rw('Koef. kruhu','1,5')+rw('1 ks',fmt(p1)+' Kč')+(n>1?rw('Celkem '+n+' ks',fmt(pt)+' Kč',true):''),
+    desc:`${p.label} · ⌀${pr}mm × ${n}ks`,type:'vysek',n});
+}
+function calcList(){
+  const p=getP('list');if(!p){toast('Vyberte výrobce, typ a zrnitost','⚠️');return}
+  const si=parseFloat(g('list-sirka').value),de=parseFloat(g('list-delka').value),n=parseInt(g('list-pocet').value)||1;
+  if(!si||!de){toast('Zadejte šířku a délku listu','⚠️');return}
+  const sm=si/1000,dm=de/1000,zip=ZIP_STATE.list,cm=zip?p.cena+199:p.cena,p1=sm*dm*cm,pt=p1*n;
+  showR('list',{p1,disp:n>1?pt:p1,lbl:n>1?`Celkem (${n} ks)`:'Cena za 1 list',
+    form:`${cm} × ${sm.toFixed(3)} × ${dm.toFixed(3)} = ${fmt(p1)} Kč/ks`,
+    rows:rw('Materiál',p.label)+rw('Cena mat.',p.cena+' Kč/m²')+(zip?rw('Zip/samolepka','+199 Kč/m²'):'')+rw('Rozměr',`${si}×${de}mm`)+rw('1 list',fmt(p1)+' Kč')+(n>1?rw('Celkem '+n+' ks',fmt(pt)+' Kč',true):''),
+    desc:`${p.label} · ${si}×${de}mm × ${n}ks`,type:'list',n});
+}
+function calcPas(){
+  const p=getP('pas');if(!p){toast('Vyberte výrobce, typ a zrnitost','⚠️');return}
+  const si=parseFloat(g('pas-sirka').value),de=parseFloat(g('pas-delka').value),sp=parseFloat(g('pas-spoj').value),n=parseInt(g('pas-pocet').value)||1;
+  if(!si||!de){toast('Zadejte šířku a délku pásu','⚠️');return}
+  if(isNaN(sp)){toast('Zadejte cenu spoje','⚠️');return}
+  const sm=si/1000,dm=de/1000,cmat=sm*dm*p.cena,p1=cmat+sp,pt=p1*n;
+  showR('pas',{p1,disp:n>1?pt:p1,lbl:n>1?`Celkem (${n} ks)`:'Cena za 1 pás',
+    form:`${p.cena} × ${sm.toFixed(3)} × ${dm.toFixed(3)} + ${fmt(sp)} = ${fmt(p1)} Kč/ks`,
+    rows:rw('Materiál',p.label)+rw('Cena mat.',p.cena+' Kč/m²')+rw('Rozměr pásu',`${si}×${de}mm`)+rw('Mat. cena',fmt(cmat)+' Kč')+rw('Cena spoje',fmt(sp)+' Kč')+rw('1 pás',fmt(p1)+' Kč')+(n>1?rw('Celkem '+n+' ks',fmt(pt)+' Kč',true):''),
+    desc:`${p.label} · ${si}×${de}mm × ${n}ks`,type:'pas',n});
+}
+
+// ── History ──
+function addHist(pfx,d){
+  const m=parseFloat(g(pfx+'-marze').value),sl=(!isNaN(m)&&m>0&&m<100)?d.p1*(1-m/100):null;
+  const now=new Date(),time=now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'});
+  hist.unshift({type:pfx,icon:ICONS[pfx],price:d.disp,p1:d.p1,sell:sl,desc:d.desc,lbl:d.lbl,time,rabat:m});
+  if(hist.length>20)hist.pop();
+  renderHist();
+}
+function renderHist(){
+  const el=g('hist-list');
+  if(!hist.length){
+    el.innerHTML='<div class="cart-empty-state"><div class="cart-empty-icon" data-ico="clock"></div><div class="cart-empty-title">Zatím žádné kalkulace</div><div class="cart-empty-sub">Výsledky se ukládají automaticky</div></div>';
+    if(typeof renderIcons==='function')renderIcons();
+    return;
+  }
+  el.innerHTML=hist.map(h=>{
+    const ico=typeof SVGS!=='undefined'?`<span class="hist-ico">${SVGS[{role:'roll',vysek:'disc',list:'sheet',pas:'belt'}[h.type]]||''}</span>`:`<span class="hist-ico"></span>`;
+    return`<div class="hist-item">${ico}<div class="hist-body"><div class="hist-title">${h.lbl}</div><div class="hist-desc">${h.desc}</div></div><div class="hist-right"><div class="hist-price">${fmt(h.price)} Kč</div>${h.sell?`<div class="hist-sell">${fmt(h.sell)} Kč (-${h.rabat}%)</div>`:''}<div class="hist-time">${h.time}</div></div></div>`;
+  }).join('');
+}
+
+// ── Cart ──
+function addCart(pfx){
+  const r=lastR[pfx];if(!r){toast('Nejprve proveďte výpočet','⚠️');return}
+  const m=parseFloat(g(pfx+'-marze').value),sl=(!isNaN(m)&&m>0&&m<100)?r.p1*(1-m/100)*r.n:null;
+  cart.push({id:Date.now(),type:pfx,price:r.disp,p1:r.p1,sell:sl,lbl:r.lbl,desc:r.desc,rabat:m,n:r.n});
+  renderCart();toast('Přidáno do souhrnu','✅');
+}
+function removeCart(id){cart=cart.filter(c=>c.id!==id);renderCart()}
+function clearCart(){if(!cart.length)return;cart=[];renderCart();toast('Souhrn vymazán','🗑')}
+function renderCart(){
+  const badge=g('s-cart-badge'),tbadge=g('tab-badge');
+  [badge,tbadge].forEach(b=>{if(b){b.style.display=cart.length?'inline-flex':'none';b.textContent=cart.length}});
+  const el=g('cart-items'),sw=g('cart-sum-wrap');
+  const icoMap={role:'roll',vysek:'disc',list:'sheet',pas:'belt'};
+  if(!cart.length){
+    el.innerHTML='<div class="cart-empty-state"><div class="cart-empty-icon" data-ico="cart"></div><div class="cart-empty-title">Souhrn je prázdný</div><div class="cart-empty-sub">Přidejte položky tlačítkem „+ Souhrn"</div></div>';
+    sw.style.display='none';if(typeof renderIcons==='function')renderIcons();updateDashStats();return;
+  }
+  el.innerHTML=cart.map(c=>{
+    const icoSvg=typeof SVGS!=='undefined'?SVGS[icoMap[c.type]]||'':'';
+    const delSvg=typeof SVGS!=='undefined'?SVGS.delete:'✕';
+    return`<div class="cart-item"><div class="cart-item-icon">${icoSvg}</div><div class="cart-item-body"><div class="cart-item-title">${c.lbl}</div><div class="cart-item-sub">${c.desc}</div></div><div class="cart-prices"><div class="cart-item-price">${fmt(c.price)} Kč</div>${c.sell?`<div class="cart-item-sell">${fmt(c.sell)} Kč (-${c.rabat}%)</div>`:''}</div><button class="cart-del" onclick="removeCart(${c.id})">${delSvg}</button></div>`;
+  }).join('');
+  const tot=cart.reduce((s,c)=>s+c.price,0);
+  const totS=cart.every(c=>c.sell)?cart.reduce((s,c)=>s+c.sell,0):null;
+  g('cart-sum').innerHTML=`
+    <div class="cart-sum-row"><span class="cart-sum-lbl">Vaše nákupní cena</span><span class="cart-sum-val">${fmt(tot)} Kč</span></div>
+    ${totS?`<div class="cart-sum-row"><span class="cart-sum-lbl">Cena pro zákazníka</span><span class="cart-sum-sell">${fmt(totS)} Kč</span></div>`:''}
+    <div class="cart-sum-meta">${cart.length} položek · bez DPH · Ceník 2026</div>`;
+  sw.style.display='block';
+  updateDashStats();
+}
+
+// ── Dashboard stats ──
+function updateDashStats(){
+  g('stat-calc').textContent=calcCount;
+  g('stat-cart').textContent=cart.length;
+  const tot=cart.reduce((s,c)=>s+c.price,0);
+  g('stat-total').textContent=cart.length?fmtShort(tot)+' Kč':'—';
+}
+
+// ── Tisk / PDF ──
+function printDoc(){
+  // Nastav datum tisku
+  const dateEl=document.getElementById('print-date');
+  if(dateEl){
+    const now=new Date();
+    dateEl.textContent=now.toLocaleDateString('cs-CZ',{day:'2-digit',month:'2-digit',year:'numeric'})+' · '+now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'});
+  }
+  // Přepni na souhrn
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item,.tab-item').forEach(b=>b.classList.remove('active'));
+  const kosik=document.getElementById('s-kosik');
+  if(kosik)kosik.classList.add('active');
+  const navKosik=document.querySelector('[data-nav="kosik"]');
+  if(navKosik)navKosik.classList.add('active');
+  // Krátká prodleva aby se DOM překreslil
+  setTimeout(()=>window.print(), 120);
+}
+
+// ── Material table ──
+let mFlt='vse',mSrch='';
+const COLS=['P16','P24','P36','P40','P50','P60','P80','P100','P120','P150','P180','P220','P240','P280','P320','P400','P500-800','P1000+','VF360','UF1500'];
+function renderMat(){
+  const data=MAT.filter(m=>{
+    if(mFlt!=='vse'&&m.v!==mFlt)return false;
+    if(mSrch&&![m.t,m.z,m.p,m.popis||''].some(x=>x.toLowerCase().includes(mSrch)))return false;
+    return true;
+  });
+  const BC={MIRKA:'tag-mirka',DEERFOS:'tag-deer',APE:'tag-ape'};
+  g('mat-tbody').innerHTML=data.map((m,i)=>{
+    const tags=(m.pouziti||[]).map(p=>`<span class="mat-tag" style="font-size:9px;padding:2px 6px">${p}</span>`).join(' ');
+    return`<tr style="cursor:pointer" onclick="toggleMatRow('mrow${i}')">
+      <td><span class="tag ${BC[m.v]}">${m.v}</span></td>
+      <td><strong>${m.t}</strong> <span style="font-size:10px;color:var(--text3)">▼</span></td>
+      <td style="max-width:120px;white-space:normal;font-size:11px">${m.z}</td>
+      <td style="font-size:11px">${m.p}</td>
+      ${COLS.map(z=>m.c[z]?`<td class="price-cell">${m.c[z]}</td>`:`<td class="empty-cell">—</td>`).join('')}
+    </tr>
+    <tr id="mrow${i}" style="display:none">
+      <td colspan="22" style="padding:0">
+        <div style="padding:14px 18px;background:var(--blue-light);border-top:1px solid rgba(0,113,227,.1)">
+          <div style="font-size:13px;color:var(--text);line-height:1.65;margin-bottom:10px">${m.popis||''}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+            <span class="mat-info-zrn" style="font-size:10px;padding:3px 9px">🔢 ${m.zrn||''}</span>
+            <span class="mat-info-zrn" style="font-size:10px;padding:3px 9px">📦 ${m.p}</span>
+            ${tags}
+          </div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+function toggleMatRow(id){
+  const r=g(id);
+  r.style.display=r.style.display==='none'?'table-row':'none';
+}
+function flt(v,btn){
+  mFlt=v;
+  document.querySelectorAll('.chip').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');renderMat();
+}
+function fltS(v){mSrch=v.toLowerCase();renderMat()}
+
+// ── Dashboard card nav (adds data-nav attrs) ──
+document.querySelectorAll('.nav-item').forEach(btn=>{
+  const txt=btn.textContent.trim().toLowerCase();
+  ['role','vysek','list','pas','kosik','historie','materialy','spoje','info','dash'].forEach(id=>{
+    if(btn.getAttribute('onclick')&&btn.getAttribute('onclick').includes("'"+id+"'"))
+      btn.setAttribute('data-nav',id);
+  });
+});
+
+// ── Init ──
+renderMat();renderCart();
+</script>
+<style>
+
+.nav-ico,.tab-ico{display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-ico{width:18px;height:18px}
+.nav-ico svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tab-ico{width:26px;height:26px}
+.tab-ico svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.dash-icon{width:44px;height:44px;margin-bottom:14px;display:flex;align-items:center;justify-content:center}
+.dash-icon svg{width:44px;height:44px;fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.dash-card.purple .dash-icon svg{stroke:#af52de}
+.dash-card.blue .dash-icon svg{stroke:var(--blue)}
+.dash-card.orange .dash-icon svg{stroke:var(--accent)}
+.dash-card.green .dash-icon svg{stroke:var(--green)}
+.dash-arrow{width:20px;height:20px;display:flex;align-items:center;justify-content:center;position:absolute;bottom:16px;right:16px;opacity:.35}
+.dash-arrow svg{width:20px;height:20px;stroke:var(--text);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.card-header-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.card-header-icon.blue svg{stroke:var(--blue)}
+.card-header-icon.orange svg{stroke:var(--accent)}
+.card-header-icon.green svg{stroke:var(--green)}
+.info-card-icon{width:36px;height:36px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--card2);border:1px solid var(--border)}
+.info-card-icon svg{width:20px;height:20px;stroke:var(--text2);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.cart-empty-icon{width:56px;height:56px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;opacity:.3}
+.cart-empty-icon svg{width:56px;height:56px;stroke:var(--text);fill:none;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.hist-ico{width:32px;height:32px;border-radius:9px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hist-ico svg{width:16px;height:16px;stroke:var(--blue);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.cart-item-icon svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<script>
+
+
+var hskwxdt=0x49; var bwchjeg=0x17; var wwnavku=0x62; var ti_erwo=0x3a; var djctagm=0x15; var gbbimdn=0x18;
+// ── SVG Icon Library ──
+const SVGS = {
+  home:    `<svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>`,
+  belt:    `<svg viewBox="0 0 24 24"><ellipse cx="6" cy="12" rx="4" ry="8"/><ellipse cx="18" cy="12" rx="4" ry="8"/><line x1="6" y1="4" x2="18" y2="4"/><line x1="6" y1="20" x2="18" y2="20"/><line x1="10" y1="12" x2="14" y2="12" stroke-width="2.5"/></svg>`,
+  roll:    `<svg viewBox="0 0 24 24"><rect x="3" y="8" width="15" height="8" rx="2"/><rect x="18" y="8" width="3" height="8" rx="1.5"/><line x1="3" y1="12" x2="18" y2="12" stroke-dasharray="2 2"/></svg>`,
+  disc:    `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/></svg>`,
+  sheet:   `<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg>`,
+  cart:    `<svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>`,
+  clock:   `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 15.5"/></svg>`,
+  table:   `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>`,
+  link:    `<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>`,
+  info:    `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="8" stroke-width="2.5"/><polyline points="11 11 12 11 12 16 13 16"/></svg>`,
+  ruler:   `<svg viewBox="0 0 24 24"><path d="M5 3l14 14-2 2a2 2 0 01-2.83 0L3 8a2 2 0 010-2.83L5 3z"/><line x1="7.5" y1="10.5" x2="9.5" y2="8.5"/><line x1="11" y1="14" x2="13" y2="12"/><line x1="14.5" y1="17.5" x2="16.5" y2="15.5"/></svg>`,
+  zap:     `<svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+  hook:    `<svg viewBox="0 0 24 24"><path d="M12 2v8"/><path d="M12 10a5 5 0 105 5"/><circle cx="17" cy="19" r="2"/></svg>`,
+  gear:    `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>`,
+  more:    `<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>`,
+  chevron: `<svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>`,
+  delete:  `<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>`,
+  plus:    `<svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+  print:   `<svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>`,
+  dark:    `<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>`,
+  sun:     `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`,
+};
+
+// Map section icons for dynamic use
+const SECTION_ICONS = {role:'roll', vysek:'disc', list:'sheet', pas:'belt'};
+
+// Render all [data-ico] elements
+function renderIcons(){
+  document.querySelectorAll('[data-ico]').forEach(el=>{
+    const ico=el.getAttribute('data-ico');
+    if(SVGS[ico]) el.innerHTML=SVGS[ico];
+  });
+}
+
+// Override ICONS used in cart/history rendering
+const ICON_HTML = {
+  role:  `<span class="hist-ico">${SVGS.roll}</span>`,
+  vysek: `<span class="hist-ico">${SVGS.disc}</span>`,
+  list:  `<span class="hist-ico">${SVGS.sheet}</span>`,
+  pas:   `<span class="hist-ico">${SVGS.belt}</span>`,
+};
+const CART_ICON_HTML = {
+  role:  SVGS.roll,
+  vysek: SVGS.disc,
+  list:  SVGS.sheet,
+  pas:   SVGS.belt,
+};
+
+// Override topbar buttons with SVG
+function initTopbarIcons(){
+  const darkBtn=document.getElementById('dark-btn');
+  if(darkBtn) darkBtn.innerHTML=SVGS.sun;
+  const printBtn=document.getElementById('print-btn');
+  if(printBtn) printBtn.innerHTML=SVGS.print;
+}
+
+// Drawer icons
+function initDrawerIcons(){
+  document.querySelectorAll('.dbico[data-ico]').forEach(el=>{
+    const ico=el.getAttribute('data-ico');
+    if(SVGS[ico]) el.innerHTML=SVGS[ico];
+  });
+}
+
+// Cart empty state icon
+function getEmptyIcon(ico){ return `<div class="cart-empty-icon">${SVGS[ico]||''}</div>`; }
+
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  const d=document.body.classList.contains('dark');
+  const darkBtn=document.getElementById('dark-btn');
+  if(darkBtn) darkBtn.innerHTML=d?SVGS.sun:SVGS.dark;
+  const drawerDark=document.getElementById('drawer-dark-ico');
+  if(drawerDark) drawerDark.innerHTML=d?SVGS.sun:SVGS.dark;
+}
+
+// Init on load
+document.addEventListener('DOMContentLoaded',()=>{
+  renderIcons();
+  initTopbarIcons();
+  setTimeout(initDrawerIcons, 100);
+});
+</script>
+<script>
+
+
+var xbjnpyd=0x71; var dtycbjc=0xaa; var kynncrc=0x0e; var iuhbfca=0x8e; var rfv_ypx=0xaf; var bipaluu=0x8c;
+// Service Worker pro offline provoz
+if('serviceWorker' in navigator){
+  const swCode=`
+self.addEventListener('install',e=>{self.skipWaiting()});
+self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
+self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>new Response('Offline',{status:503}))))});
+`;
+  const blob=new Blob([swCode],{type:'application/javascript'});
+  const swUrl=URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(()=>{});
+}
+</script>
+</body>
+</html>
